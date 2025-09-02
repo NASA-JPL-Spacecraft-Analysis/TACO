@@ -1,0 +1,93 @@
+table {
+  width: 100%;
+}
+
+th, td {
+  padding: 0 8px !important;
+}
+
+th {
+  z-index: 10 !important;
+}
+
+th:first-of-type, td:first-of-type {
+  padding: 0 0 0 16px !important;
+}
+
+th:last-of-type, td:last-of-type {
+  padding: 0 16px 0 0 !important;
+}
+
+tr:not(.mat-header-row):hover {
+  background-color: #ebebeb;
+}
+
+.mat-cell {
+  flex: 0 0 25% !important;
+  word-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap !important;
+  hyphens: auto;
+  width: 25% !important;
+}
+
+.mat-column-updated {
+  width: 16% !important;
+}
+
+.highlighted:first-of-type {
+  background-color: #ebebeb;
+  font-weight: bold;
+}
+
+.mat-column-description {
+  text-align: left;
+}
+
+.mat-column-status {
+  text-align: left;
+}
+
+.mat-column-version {
+  text-align: left;
+}
+
+.mat-column-serialNumber {
+  text-align: center;
+}
+
+.mat-column-partNumber {
+  text-align: left;
+}
+
+.mat-column-username {
+  text-align: center;
+}
+
+.mat-column-rationale {
+  text-align: left;
+}
+
+.mat-column-updated {
+  text-align: center;
+}
+
+.mat-column-image {
+  text-align: center;
+}
+
+.item-link {
+  cursor: pointer;
+  color: #0000ee;
+}
+
+.image-hover-area {
+  cursor: pointer;
+}
+
+.image-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

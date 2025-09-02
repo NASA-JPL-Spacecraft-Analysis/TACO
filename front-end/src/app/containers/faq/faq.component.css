@@ -1,0 +1,11 @@
+.faq-container {
+  margin: 1em;
+}
+
+.mat-divider {
+  margin-bottom: 1em;
+}
+
+.mat-expansion-panel {
+  margin-bottom: 1em !important;
+}

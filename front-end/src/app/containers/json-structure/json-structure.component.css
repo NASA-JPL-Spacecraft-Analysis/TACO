@@ -1,0 +1,15 @@
+.file-upload {
+  display: none;
+}
+
+.button-padding {
+  margin: 1em 1em 1em 0;
+}
+
+.warning {
+  color: red;
+}
+
+.container {
+  margin: 1em;
+}

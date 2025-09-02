@@ -1,0 +1,13 @@
+.history-container {
+  margin: 1em;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.export-button {
+  float: right;
+  margin: 1em;
+}

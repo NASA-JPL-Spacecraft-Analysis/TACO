@@ -1,0 +1,88 @@
+<form class="management-settings-form">
+  <mat-form-field class="sort-order">
+    <input matInput 
+      [(ngModel)]="sortOrder"
+      name="sortOrder"
+      placeholder="Testbed Sort Order"
+      type="number">
+
+    <button mat-button *ngIf="sortOrder" matSuffix mat-icon-button aria-label="Clear"
+      (click)="sortOrder = null;">
+      <mat-icon matTooltip="Clear" svgIcon="clear"></mat-icon>
+    </button>
+
+    <mat-hint align="start">
+      Enter a number to sort the testbeds in the navigation tabs, lower numbers first.
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput 
+      [(ngModel)]="currentTestbedSettings.emailNotificationsList"
+      name="emailNotificationsList"
+      placeholder="Email Notifications List">
+
+    <button mat-button *ngIf="currentTestbedSettings.emailNotificationsList" matSuffix mat-icon-button aria-label="Clear"
+      (click)="currentTestbedSettings.emailNotificationsList = null;">
+      <mat-icon matTooltip="Clear" svgIcon="clear"></mat-icon>
+    </button>
+
+    <mat-hint align="start">
+      <strong>Enter any number of email addresses / lists separated by commas.</strong>
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput 
+      [(ngModel)]="currentTestbedSettings.testbedEditGroup"
+      name="testbedEditGroup"
+      placeholder="Testbed Edit Group">
+
+    <button mat-button *ngIf="currentTestbedSettings.testbedEditGroup" matSuffix mat-icon-button aria-label="Clear"
+      (click)="currentTestbedSettings.testbedEditGroup = null;">
+      <mat-icon matTooltip="Clear" svgIcon="clear"></mat-icon>
+    </button>
+
+    <mat-hint align="start">
+      <strong>If provided, only these LDAP groups can edit this testbed. Separated by commas.</strong>
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-checkbox
+    [(ngModel)]="currentTestbedSettings.recentlyChangedIndicatorEnabled"
+    name="recentlyChangedIndicatorEnabled">
+    Show recent changes icon
+  </mat-checkbox>
+
+  <mat-form-field>
+    <input matInput 
+      [(ngModel)]="currentTestbedSettings.recentlyChangedIndicatorDays"
+      name="recentlyChangedIndicatorDays"
+      type="number">
+
+    <mat-hint align="start">
+      <strong>The number of days that are considered a recent change.</strong>
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-checkbox
+    [(ngModel)]="currentTestbedSettings.autoRefreshEnabled"
+    name="autoRefreshEnabled">
+    Automatically refresh the testbed
+  </mat-checkbox>
+
+  <mat-form-field>
+    <input matInput 
+      [(ngModel)]="currentTestbedSettings.autoRefreshInterval"
+      name="autoRefreshInterval"
+      type="number">
+
+    <mat-hint align="start">
+      <strong>How often you want the testbed to automatically refresh in whole seconds.</strong>
+    </mat-hint>
+  </mat-form-field>
+
+  <div class="form-controls">
+    <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Save Settings</button>
+  </div>
+</form>

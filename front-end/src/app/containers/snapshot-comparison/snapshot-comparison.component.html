@@ -1,0 +1,19 @@
+<app-header
+  [testbeds]="testbeds">
+</app-header>
+
+<div class="container">
+  <date-time-picker
+    [filterDate]="filterDate"
+    [filterTime]="filterTime"
+    [labelText]="'Compare between'"
+    [minDate]="minDate"
+    [endDateOnly]="false"
+    (filter)="onFilter($event)">
+  </date-time-picker>
+
+  <comparison-table
+    [comparisonList]="comparisonList"
+    [itemStatuses]="itemStatuses">
+  </comparison-table>
+</div>

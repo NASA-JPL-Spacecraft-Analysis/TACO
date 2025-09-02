@@ -1,0 +1,15 @@
+.color-bar-item {
+  line-height: 8px;
+}
+
+.status-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}

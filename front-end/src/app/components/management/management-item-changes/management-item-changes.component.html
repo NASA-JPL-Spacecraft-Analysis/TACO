@@ -1,0 +1,14 @@
+<p>You can use this page to edit an existing change to an item.</p>
+<p>This will <strong>NOT</strong> create a new entry, it will only modifiy an existing entry.</p>
+
+<history-table
+  [adminAction]="true"
+  [canEdit]="true"
+  [items]="items"
+  [itemChanges]="itemChanges"
+  [itemStatuses]="itemStatuses"
+  [showActions]="true"
+  [hoveredImage]="hoveredImage"
+  (entryActions)="handleEntryAction($event)"
+  (showImage)="toggleShowImage($event)">
+</history-table>

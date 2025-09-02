@@ -1,0 +1,10 @@
+<div class="status-bar">
+  <ng-container *ngFor="let colorBarItem of colorBarList">
+    <span class="color-bar-item"
+      [style.width.%]="(colorBarItem.count / totalStatuses) * 100"
+      [style.background-color]="colorBarItem.color"
+      [matTooltip]="((colorBarItem.count / totalStatuses) * 100).toFixed(0) + '% ' + colorBarItem.status">
+      &nbsp;
+    </span>
+  </ng-container>
+</div>

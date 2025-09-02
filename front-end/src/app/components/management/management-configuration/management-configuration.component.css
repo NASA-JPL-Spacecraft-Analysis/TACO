@@ -1,0 +1,16 @@
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-checkbox, .form-controls {
+  padding-top: 1em;
+}
+
+.management-settings-form {
+  width: 40em;
+}
+
+.sort-order {
+  margin-bottom: 2em;
+}

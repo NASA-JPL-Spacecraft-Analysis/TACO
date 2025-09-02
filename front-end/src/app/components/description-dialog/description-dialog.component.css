@@ -1,0 +1,16 @@
+/* Preserve newlines */
+p {
+  white-space: pre-wrap;
+}
+
+.cancel-button {
+  margin-right: 1em;
+}
+
+.mat-dialog-actions {
+  justify-content: flex-end;
+}
+
+.mat-form-field {
+  width: 100%;
+}

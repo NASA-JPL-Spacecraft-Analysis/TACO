@@ -1,0 +1,184 @@
+<app-header
+  [testbeds]="testbeds"
+  [title]="title">
+</app-header>
+
+<div class="management-container">
+  <span>Testbed Management for</span>
+  <mat-form-field class="testbed-form-field">
+    <mat-select (selectionChange)="onTestbedSelect($event.value)">
+      <mat-option *ngFor="let testbed of testbeds" [value]="testbed.id">
+        {{testbed.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div *ngIf="selectedTestbed" class="sub-nav-buttons">
+    <button mat-raised-button class="mat-primary" [ngClass]="{'active': currentView === managementViews.Configuration}"
+      (click)="changeView(managementViews.Configuration)">
+      Configuration
+    </button>
+
+    <button mat-raised-button class="mat-primary" [ngClass]="{'active': currentView === managementViews.Statuses}"
+      (click)="changeView(managementViews.Statuses)">
+      Statuses
+    </button>
+
+    <button mat-raised-button class="mat-primary" [ngClass]="{'active': currentView === managementViews.Components}"
+      (click)="changeView(managementViews.Components)">
+      Components
+    </button>
+
+    <button mat-raised-button class="mat-primary" [ngClass]="{'active': currentView === managementViews.Changes }"
+      (click)="changeView(managementViews.Changes)">
+      Item Changes
+    </button>
+
+    <button mat-raised-button class="mat-primary" [ngClass]="{'active': currentView === managementViews.ItemChangesHistory }"
+      (click)="changeView(managementViews.ItemChangesHistory)">
+      Item Changes History
+    </button>
+
+    <button mat-raised-button class="mat-primary" [ngClass]="{'active': currentView === managementViews.ItemDataHistory }"
+      (click)="changeView(managementViews.ItemDataHistory)">
+      Item Data History
+    </button>
+  </div>
+
+  <ng-container *ngIf="selectedTestbed">
+    <ng-container *ngIf="currentView === managementViews.Configuration">
+      <management-configuration *ngIf="testbedSettingsMap"
+        [testbedSettings]="testbedSettingsMap.get(selectedTestbed.id)"
+        [selectedTestbed]="selectedTestbed"
+        (sortOrderSave)="onSortOrderSave($event)"
+        (testbedSettingsSave)="onTestbedSettingsSave($event)">
+      </management-configuration>
+    </ng-container>
+
+    <ng-container *ngIf="currentView === managementViews.Statuses">
+      <button mat-raised-button color="primary" type="submit" (click)="onAddStatus()">
+        Add Status
+      </button>
+
+      <management-status-table
+        [statuses]="selectedTestbed.statuses"
+        [testbedName]="selectedTestbed.name"
+        (statusOutput)="onStatusOutput($event)">
+      </management-status-table>
+    </ng-container>
+
+    <ng-container *ngIf="currentView === managementViews.Components">
+      <h3>{{selectedTestbed.name}}'s Components</h3>
+
+      <button mat-raised-button color="primary" type="submit" (click)="onModifyItem()">
+        Add Component
+      </button>
+
+      <p>Locking an item will preseve it in all views, but users won't be able to edit it. Locking a parent does not lock its children.</p>
+      <p>Deleting an item will still preserve it in the database, but it will no longer show in the application. You cannot delete parents.</p>
+
+      <table mat-table [dataSource]="selectedTestbedItems" *ngIf="selectedTestbedItems" class="mat-elevation-z2">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef> Id </th>
+          <td mat-cell *matCellDef="let item"> {{item.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="parentId">
+          <th mat-header-cell *matHeaderCellDef> Parent Id </th>
+          <td mat-cell *matCellDef="let item"> {{item.parentId}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="parent">
+          <th mat-header-cell *matHeaderCellDef> Parent </th>
+          <td mat-cell *matCellDef="let item">
+            <span *ngIf="item.parentId">{{items[item.parentId].name}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let item"> {{item.name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="fullname">
+          <th mat-header-cell *matHeaderCellDef> Fullname </th>
+          <td mat-cell *matCellDef="let item"> {{item.fullname }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="online">
+          <th mat-header-cell *matHeaderCellDef>Online</th>
+          <td mat-cell *matCellDef="let item"> {{item.online}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="locked">
+          <th mat-header-cell *matHeaderCellDef> Locked </th>
+          <td mat-cell *matCellDef="let item"> {{item.locked}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sortOrder">
+          <th mat-header-cell *matHeaderCellDef> Sort Order </th>
+          <td mat-cell *matCellDef="let item"> {{item.sortOrder}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let item">
+            <mat-menu #actionMenu="matMenu">
+              <button mat-menu-item (click)="onModifyItem(item)">Edit</button>
+
+              <ng-container *ngIf="item.locked; else unlock">
+                <button mat-menu-item (click)="onLockItem(item)">Unlock</button>
+              </ng-container>
+
+              <ng-template #unlock>
+                <button mat-menu-item (click)="onLockItem(item)">Lock</button>
+              </ng-template>
+              
+              <button mat-menu-item (click)="onDeleteItem(item)">Delete</button>
+            </mat-menu>
+
+            <button mat-icon-button [matMenuTriggerFor]="actionMenu">
+              <mat-icon svgIcon="more_vert"></mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr
+          mat-row
+          *matRowDef="let myRowData; columns: columnsToDisplay">
+        </tr>
+      </table>
+    </ng-container>
+
+    <ng-container *ngIf="currentView === managementViews.Changes">
+      <management-item-changes
+        [itemChanges]="itemChanges"
+        [items]="items"
+        [itemStatuses]="itemStatuses"
+        [hoveredImage]="hoveredImage"
+        (editOutput)="onEditItem($event)"
+        (showImageOutput)="toggleShowImage($event)">
+      </management-item-changes>
+    </ng-container>
+
+    <ng-container *ngIf="selectedTestbed">
+      <ng-container *ngIf="currentView === managementViews.ItemChangesHistory">
+        <management-history-table
+          [historyList]="selectedItemChangesHistory"
+          [itemStatuses]="itemStatuses"
+          [title]="'Item Changes History'">
+        </management-history-table>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="selectedTestbed">
+      <ng-container *ngIf="currentView === managementViews.ItemDataHistory">
+        <management-history-table
+          [historyList]="selectedItemDataHistory"
+          [title]="'Item Data History'">
+        </management-history-table>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>

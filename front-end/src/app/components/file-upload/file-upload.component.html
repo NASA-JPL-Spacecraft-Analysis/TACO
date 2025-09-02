@@ -1,0 +1,27 @@
+<div class="file-upload-container">
+  <input
+    type="file"
+    class="file-upload"
+    accept=".jpg,.jpeg,.png"
+    (input)="onFileUpload($event)"
+    #fileUpload
+  />
+
+  <p class="instructions">
+    Choose an image to upload with the current status.
+  </p>
+
+  <button mat-raised-button
+    type="file"
+    color="primary"
+    (click)="onChooseFile($event)">
+      Select File
+  </button>
+  
+  <br />
+
+  <p *ngIf="file && file.name">
+    <mat-icon class="clear-icon" matTooltip="Remove file" svgIcon="clear" (click)="clearFile()"></mat-icon>
+    Uploaded File: {{file.name}}
+  </p>
+</div>

@@ -1,0 +1,72 @@
+<div class="item-container" [ngClass]="{ 'offline': !item.online }">
+  <color-bar *ngIf="itemStatusMap && collapsedItems.has(item.id)"
+    [item]="item"
+    [itemStatuses]="itemStatuses"
+    [itemStatusMap]="itemStatusMap">
+  </color-bar>
+
+  <div class="item-header">
+    <span
+      class="header-label"
+      (click)="toggleCollapsedItem(item.id)"
+      matTooltip="Click to expand or collapse this item"
+      matTooltipPosition="right">
+      {{item.name}}
+    </span>
+
+    <button mat-icon-button *ngIf="showOnlineToggleButton" (click)="onOnlineToggle(item)">
+      <mat-icon *ngIf="item.online" matTooltip="Temporarily remove these items from the testbed" svgIcon="offline"></mat-icon>
+      <mat-icon *ngIf="!item.online" matTooltip="Re-integrate these items after a temporary removal" svgIcon="online"></mat-icon>
+    </button>
+  </div>
+
+  <div class="item-content" [ngClass]="{ collapse: collapsedItems.has(item.id) }">
+    <div class="item" *ngFor="let child of item.children">
+      <!-- We know if we're on a leaf because it won't have any children -->
+      <item-group *ngIf="child.children !== null; else itemChangesLink"
+        [collapsedItems]="collapsedItems"
+        [item]="child"
+        [itemStatusMap]="itemStatusMap"
+        [itemStatuses]="itemStatuses"
+        [presentationMode]="presentationMode"
+        [recentlyChangedDays]="recentlyChangedDays"
+        [showOnlineToggleButton]="showOnlineToggleButton"
+        (selectItem)="onChildSelectItem($event)"
+        (onlineToggle)="onOnlineToggle($event)">
+      </item-group>
+
+      <ng-template #itemChangesLink>
+        <mat-chip-list>
+          <div *ngIf="child.latestChange && child.latestChange.status && itemStatuses[child.latestChange.status] && child.latestChange.status !== notPresentStatusId; else notPresent">
+            <mat-chip
+              [style.background-color]="itemStatuses[child.latestChange.status].color"
+              (click)="onChildSelectItem(child)"
+              class="item-link pointer"
+              matTooltip="{{ formatTooltipData(child.latestChange) }}"
+              matTooltipClass="item-group-tooltip">
+                {{child.name}}
+              
+                <span *ngIf="checkRecentChange(child)" class="recently-changed">**</span>
+            </mat-chip>
+
+            <ng-container *ngIf="presentationMode">
+              <br />
+
+              <p class="test-info">SN: {{child.latestChange.serialNumber}} Ver: {{child.latestChange.version}}</p>
+            </ng-container>
+          </div>
+
+          <ng-template #notPresent>
+            <mat-chip
+              (click)="onChildSelectItem(child)"
+              class="item-link pointer no-status-chip"
+              matTooltip="Not present"
+              matTooltipClass="item-group-tooltip">
+                {{child.name}}
+            </mat-chip>
+          </ng-template>
+        </mat-chip-list>
+      </ng-template>
+    </div>
+  </div>
+</div>

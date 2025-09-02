@@ -1,0 +1,39 @@
+<app-header
+  [testbeds]="testbeds">
+</app-header>
+
+<div class="container" *ngIf="currentTestbed">
+  <button mat-raised-button class="export-button" color="primary" (click)="exportCSVSnapshot()">
+    Export to CSV
+  </button>
+
+  <button mat-raised-button class="export-button" color="primary" (click)="exportJSONSnapshot()">
+    Export to JSON
+  </button>
+
+  <button mat-raised-button class="export-button" color="primary" [routerLink]="'/testbed/' + currentTestbed.id + '/snapshot/comparison'">
+    Comparison
+  </button>
+
+  <date-time-picker
+    [filterDate]="filterDate"
+    [filterTime]="filterTime"
+    [labelText]="'Filter'"
+    [minDate]="minDate"
+    [endDateOnly]="true"
+    (filter)="onFilter($event)">
+  </date-time-picker>
+
+  <ng-container *ngIf="itemStatuses">
+    <item-group *ngFor="let item of filteredItemData"
+      [collapsedItems]="collapsedItems"
+      [item]="item"
+      [itemStatuses]="itemStatuses"
+      (selectItem)="onItemSelect($event)">
+    </item-group>
+
+    <legend
+      [itemStatuses]="itemStatuses">
+    </legend>
+  </ng-container>
+</div>

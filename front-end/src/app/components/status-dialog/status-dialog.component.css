@@ -1,0 +1,12 @@
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-controls button {
+  margin-right: 1em;
+}
+
+.cancel-button {
+  background-color: #e0e0e0;
+}

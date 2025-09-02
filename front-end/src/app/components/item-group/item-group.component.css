@@ -1,0 +1,68 @@
+.collapse {
+  display: none;
+}
+
+.header-label {
+  cursor: pointer;
+}
+
+.item-link {
+  font-size: 1.25em;
+  line-height: 1.5em;
+}
+
+.item-container {
+  min-width: 6em;
+  margin: .5em;
+  padding: .5em;
+  display: inline-flex;
+  border: 1px solid gray;
+  border-radius: .5em;
+  flex-direction: column;
+}
+
+.item-content {
+  padding: .5em;
+}
+
+.item {
+  display: inline;
+}
+
+.item-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.offline {
+  opacity: .5;
+  border: 2px dashed;
+}
+
+.mat-icon-button {
+  width: 24px;
+  height: 24px;
+  line-height: 10px;
+  bottom: 1px;
+}
+
+.mat-icon {
+  transform: scale(.75);
+}
+
+.mat-chip.no-status-chip {
+  background-color: #a9a9a9;
+}
+
+.test-info {
+  margin: 0;
+  padding-left: 1.5em;
+  font-size: .85em;
+  margin-top: -.2em;
+  padding-bottom: 0.2em;
+}
+
+.recently-changed {
+  color: red;
+  font-size: 1.25em;
+}

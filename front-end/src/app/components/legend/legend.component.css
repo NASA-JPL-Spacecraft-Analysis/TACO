@@ -1,0 +1,15 @@
+.legend-card {
+  position: fixed;
+  bottom: 2em;
+  right: 2em;
+}
+
+.legend-card:hover {
+  opacity: .7;
+}
+
+.offline-chip {
+  border: 2px dashed gray;
+  height: 14px;
+  width: 26px;
+}

@@ -1,0 +1,77 @@
+<div class="date-picker-container">
+  <span>{{labelText}}:</span>
+
+  <ng-container *ngIf="!endDateOnly">
+    <mat-form-field>
+      <input matInput
+        [matDatepicker]="startDatePicker"
+        [min]="minDate"
+        [max]="endDate || maxDate" 
+        [(ngModel)]="startDate"
+        (dateChange)="onDateChange()"
+        (click)="startDatePicker.open()"
+        placeholder="Start Date"
+        readonly
+        matTooltip="All dates are in UTC!"
+        matTooltipPosition="left"
+        matTooltipClass="readable-tooltip">
+      <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #startDatePicker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput
+        [ngxTimepicker]="startTimePicker"
+        [format]="24"
+        [disabled]="!startDate"
+        [(ngModel)]="startTime"
+        (ngModelChange)="onDateChange()"
+        (click)="startTimePicker.open()"
+        placeholder="Start Time"
+        aria-label="24hr format"
+        readonly>
+      <ngx-material-timepicker-toggle matSuffix class="time-button" [for]="startTimePicker">
+        <mat-icon svgIcon="clock" ngxMaterialTimepickerToggleIcon></mat-icon>
+      </ngx-material-timepicker-toggle>
+      <ngx-material-timepicker [enableKeyboardInput]="true" #startTimePicker></ngx-material-timepicker>
+    </mat-form-field>
+
+    <span>and</span>
+  </ng-container>
+
+  <mat-form-field>
+    <input matInput
+      [matDatepicker]="endDatePicker"
+      [min]="startDate || minDate"
+      [max]="maxDate"
+      [placeholder]="endDateTooltip"
+      [(ngModel)]="endDate"
+      (dateChange)="onDateChange()"
+      (click)="endDatePicker.open()"
+      readonly
+      matTooltip="All dates are in UTC!"
+      matTooltipPosition="right"
+      matTooltipClass="readable-tooltip">
+    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+    <mat-datepicker #endDatePicker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput
+      [ngxTimepicker]="endTimePicker"
+      [format]="24"
+      [disabled]="!endDate"
+      [placeholder]="endTimeTooltip"
+      [(ngModel)]="endTime"
+      (ngModelChange)="onDateChange()"
+      (click)="endTimePicker.open()"
+      aria-label="24hr format"
+      readonly>
+    <ngx-material-timepicker-toggle matSuffix class="time-button" [for]="endTimePicker">
+      <mat-icon svgIcon="clock" ngxMaterialTimepickerToggleIcon></mat-icon>
+    </ngx-material-timepicker-toggle>
+    <ngx-material-timepicker [enableKeyboardInput]="true" #endTimePicker></ngx-material-timepicker>
+  </mat-form-field>
+
+  <button mat-raised-button class="clear-filter-button" (click)="clearFilter()">Clear</button>
+</div>

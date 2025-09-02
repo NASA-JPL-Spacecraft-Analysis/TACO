@@ -1,0 +1,83 @@
+<div class="app-header" [ngClass]="{ 'sticky': isSticky }">
+  <mat-toolbar color="primary">
+    <mat-toolbar-row class="app-header-content">
+      <span>{{headerText}}</span>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+        <mat-icon svgIcon="more_vert"></mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item [routerLink]="'/help'">
+          <span>FAQs</span>
+        </button>
+
+        <button *ngIf="isAdmin" mat-menu-item [routerLink]="'/admin'">
+          <span>Management</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar-row>
+  </mat-toolbar>
+
+  <ng-container *ngIf="testbedList.length > 0">
+    <nav mat-tab-nav-bar>
+      <ng-container *ngFor="let testbed of testbedList">
+          <a mat-tab-link
+            [routerLink]="'/testbed/' + testbed.id"
+            routerLinkActive #rla="routerLinkActive"
+            [active]="rla.isActive">
+            {{ testbed.acronym }}
+          </a>
+      </ng-container>
+
+      <a mat-tab-link
+        [routerLink]="'/upload'"
+        routerLinkActive #rla="routerLinkActive"
+        [active]="rla.isActive">
+        New Testbed
+        <mat-icon svgIcon="add" class="add-icon"></mat-icon>
+      </a>
+    </nav>
+
+    <div *ngIf="currentTestbed" class="sub-nav-buttons">
+      <div>
+        <button mat-raised-button
+          class="mat-primary"
+          [routerLink]="'/testbed/' + currentTestbed.id"
+          [class.mat-accent]="checkRoute('/testbed/' + currentTestbed.id)">
+          Overview
+        </button>
+
+        <button mat-raised-button
+          class="mat-primary"
+          [routerLink]="'/testbed/' + currentTestbed.id + '/history'"
+          routerLinkActive="mat-accent">
+          History
+        </button>
+
+        <button mat-raised-button
+          class="mat-primary"
+          [routerLink]="'/testbed/' + currentTestbed.id + '/snapshot'"
+          routerLinkActive="mat-accent">
+          Snapshot
+        </button>
+      </div>
+
+      <mat-slider *ngIf="showVizActions"
+        invert="true"
+        [max]="maxRecentlyChangedValue"
+        [value]="recentlyChangedDays"
+        thumbLabel="true"
+        matTooltip="Drag to see recently changed items"
+        matTooltipPosition="right"
+        (change)="onSliderChange($event.value)">
+      </mat-slider>
+
+      <div class="viz-buttons" *ngIf="showVizActions">
+        <button mat-raised-button (click)="onDescriptionClick()">Description</button>
+
+        <button mat-raised-button (click)="onPresentationClick()">Presentation Mode</button>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,57 @@
+<h1 mat-dialog-title>{{title}}</h1>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+  
+      <input matInput
+        placeholder="Name"
+        type="text"
+        [formControl]="form.controls['name']"
+        required
+      />
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Fullname</mat-label>
+  
+      <input matInput
+        placeholder="Fullname"
+        [formControl]="form.controls['fullname']"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Sort Order</mat-label>
+  
+      <input matInput
+        placeholder="Sort Order"
+        [formControl]="form.controls['sortOrder']"
+        type="number"
+      />
+    </mat-form-field>
+
+    <mat-form-field *ngIf="testbedItemList">
+      <mat-label>Parent</mat-label>
+
+      <mat-select [formControl]="form.controls['parentId']">
+        <mat-option [value]="null"></mat-option>
+        <mat-option *ngFor="let item of testbedItemList" [value]="item.id">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="form-controls">
+      <button mat-raised-button color="accent" (click)="onSubmit(form.value)">
+        Save
+      </button>
+
+      <button mat-raised-button class="horizontal-padding" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

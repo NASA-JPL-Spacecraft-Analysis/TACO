@@ -1,0 +1,40 @@
+<h1 mat-dialog-title>{{itemData.fullname}}</h1>
+
+<div mat-dialog-content>
+  <ng-container *ngIf="itemData.latestChange; else noChanges">
+    <h3>Description</h3>
+    <p [innerHTML]="itemData.latestChange.description | insertLinkTags"></p>
+
+    <h3>Status</h3>
+    <p>{{ getItemStatus() }}</p>
+
+    <h3>Version</h3>
+    <p>{{ itemData.latestChange.version }}</p>
+
+    <h3>Serial Number</h3>
+    <p>{{ itemData.latestChange.serialNumber }}</p>
+
+    <h3>Part Number</h3>
+    <p>{{ itemData.latestChange.partNumber }}</p>
+
+    <h3>Rationale / Activity Report</h3>
+    <p [innerHTML]="itemData.latestChange.rationale | insertLinkTags"></p>
+
+    <h3>Updated By</h3>
+    <p>{{ itemData.latestChange.username }}</p>
+
+    <h3>Updated At</h3>
+    <p>{{itemData.latestChange.updated }}</p>
+  </ng-container>
+
+  <ng-template #noChanges>
+    <p>No changes logged for this component.</p>
+  </ng-template>
+</div>
+
+<div mat-dialog-actions>
+  <button
+    (click)="onCancel()"
+    mat-raised-button
+    class="cancel-button">Close</button>
+</div>

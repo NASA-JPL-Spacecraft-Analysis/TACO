@@ -1,0 +1,26 @@
+<app-header
+  [recentlyChangedDays]="currentRecentlyChangedValue"
+  [showVizActions]="true"
+  [testbeds]="testbeds"
+  (descriptionClick)="onDescriptionClick()"
+  (presentationClick)="onPresentationClick()"
+  (sliderChange)="onSliderChange($event)">
+</app-header>
+
+<div class="viz-container" *ngIf="itemDataList && userCanEdit !== undefined">
+  <item-group *ngFor="let item of itemDataList"
+    [collapsedItems]="collapsedItems"
+    [item]="item"
+    [itemStatusMap]="itemStatusMap"
+    [itemStatuses]="itemStatuses"
+    [presentationMode]="presentationMode"
+    [recentlyChangedDays]="recentlyChangedDays"
+    [showOnlineToggleButton]="userCanEdit"
+    (selectItem)="onSelectItem($event)"
+    (onlineToggle)="onOnlineToggle($event)">
+  </item-group>
+
+  <legend
+    [itemStatuses]="itemStatuses">
+  </legend>
+</div>

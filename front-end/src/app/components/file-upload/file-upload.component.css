@@ -1,0 +1,17 @@
+.clear-icon {
+  cursor: pointer;
+  position: relative;
+  top: 6px;
+}
+
+.file-upload {
+  display: none;
+}
+
+.file-upload-container {
+  margin-bottom: 1em;
+}
+
+.instructions {
+  margin-top: 0px;
+}

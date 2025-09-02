@@ -1,0 +1,63 @@
+<app-header
+  [testbeds]="testbeds$ | async">
+</app-header>
+
+<div class="container">
+  <input
+    type="file"
+    class="file-upload"
+    (input)="onFileEvent($event)"
+    #jsonInput />
+
+  <!-- setting the input element's value prop to empty resets it, so that
+  a user can upload a structure, change it, and then try reuploading right after -->
+  <button
+    mat-raised-button
+    type="file"
+    class="button-padding"
+    (click)="jsonInput.value = ''; jsonInput.click()">Select File</button>
+
+    <h3
+      *ngIf="(errors$ | async) as error"
+      class="warning">{{ error }}</h3>
+
+  <ng-container *ngIf="(data$ | async)">
+    <button
+      mat-raised-button
+      class="button-padding"
+      color="accent"
+      (click)="onUploadClick($event)"
+      >
+      Upload This Structure
+    </button>
+  </ng-container>
+
+  <ng-container *ngIf="(data$ | async) as items; else instructions">
+    <ng-container *ngIf="(testbedData$ | async) as testbed">
+      <hr />
+
+      <h1>Preview of the testbed: {{testbed.name}}</h1>
+      <item-group *ngFor="let item of items"
+        [collapsedItems]="collapsedItems"
+        [item]="item">
+      </item-group>
+
+      <legend
+        *ngIf="(statuses$ | async)"
+        [itemStatuses]="(statuses$ | async)">
+      </legend>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #instructions>
+    <p>
+      Uploading a new testbed requires the input of a JSON file in the following format:<br>
+      There can be any number of statuses, each with a name and a hex color.<br>
+      The structure of the testbed is in a tree, so only the leaf nodes will be displayed as clickable items in your testbed.
+    </p>
+
+    <pre>
+      <code [innerHTML]="sampleJson"></code>
+    </pre>
+  </ng-template>
+</div>

@@ -1,0 +1,54 @@
+.mat-slider {
+  min-width: 240px;
+}
+
+.add-icon {
+  margin-left: 16px;
+  margin-right: 0px !important;
+}
+
+.app-header {
+  position: sticky;
+  width: 100%;
+  z-index: 100;
+  top: 0;
+  background-color: #fafafa;
+}
+
+.sticky {
+  -webkit-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.5);
+  box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.5);
+}
+
+.sub-nav-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 1em;
+}
+
+.app-header-content {
+  justify-content: space-between;
+}
+
+.mat-datepicker-toggle {
+  color: white;
+}
+
+.mat-icon-button {
+  position: absolute;
+  right: 0;
+}
+
+.menu-button {
+  margin: 26px 0 0 18px;
+  color: white;
+}
+
+.new-testbed-button {
+  padding-right: 0px;
+}
+
+.mat-tab-label-active {
+  opacity: 1;
+}

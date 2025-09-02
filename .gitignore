@@ -1,0 +1,12 @@
+# Swap Files
+*.swp
+
+# OSX Files
+.DS_Store
+
+# Project Files
+.env
+.idea
+testbed-viz/.idea
+front-end/.angular
+front-end/package-lock.json

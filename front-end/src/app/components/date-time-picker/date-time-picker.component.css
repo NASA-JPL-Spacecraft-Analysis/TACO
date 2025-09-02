@@ -1,0 +1,13 @@
+.mat-form-field {
+  width: 120px;
+  padding: 0px 8px;
+}
+
+.clear-filter-button {
+  margin-left: 16px;
+}
+
+.time-button {
+  position: relative;
+  top: 6px;
+}

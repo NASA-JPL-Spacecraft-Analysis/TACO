@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>{{title}}</h1>
+
+<mat-dialog-content>
+  <span>{{content}}</span>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="onSubmit()">
+    Ok
+  </button>
+
+  <button mat-raised-button class="horizontal-padding" (click)="onCancel()">
+    Cancel
+  </button>
+</mat-dialog-actions>

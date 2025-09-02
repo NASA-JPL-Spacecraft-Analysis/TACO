@@ -1,0 +1,113 @@
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+body {
+  margin: 0 auto;
+  line-height: 1.5;
+  color: #555555;
+  background-color: #fafafa;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+form {
+  margin-bottom: 1em;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Angular material over-writes */
+main {
+  padding: 0px !important;
+}
+
+img {
+  max-width: 640px;
+  max-height: 640px;
+  object-fit: cover;
+}
+
+.mat-standard-chip.mat-primary {
+  color: white !important;
+}
+
+.mat-standard-chip.mat-accent {
+  color: white !important;
+}
+
+/* Global styles */
+.pointer {
+  cursor: pointer !important;
+}
+
+/* Colors */
+.primary {
+  background-color: #3f51b5;
+}
+
+.accent {
+  background-color: #ff4081;
+}
+
+.warn {
+  background-color: #f44336;
+}
+
+.gray {
+  background-color: #a6a6a6;
+}
+
+.color-chip {
+  width: 30px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: text-top;
+  border-radius: 14px;
+  margin-right: 8px;
+}
+
+/*
+  1-off, global styles
+*/
+
+.item-group-tooltip {
+  background-color: black;
+  font-size: 1em;
+  white-space: pre-line;
+}
+
+/* Default tooltip font size is too small to read */
+.readable-tooltip {
+  font-size: 0.8em;
+}
+
+.image-container {
+  position: absolute;
+  top: 25%;
+  left: 25%;
+  max-width: 40em;
+  max-height: 40em;
+  z-index: 1000;
+  border: .5em solid #ebebeb;
+  border-radius: .5em;
+  background-color: white;
+  box-shadow: 1px 1px 10px 1px;
+}
+
+.mat-chip.no-status-chip {
+  background-color: #a9a9a9;
+}
+
+.horizontal-padding {
+  margin: 0em 1em !important;
+}
+
+.sub-nav-buttons {
+  margin-top: 16px;
+  margin-left: 8px;
+  padding-bottom: 16px;
+}
+
+.sub-nav-buttons button {
+  margin-left: 8px;
+}

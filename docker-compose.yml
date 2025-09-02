@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+    web:
+        build: ./testbed-viz
+        restart: always
+        environment:
+            JDBC_URL:
+            JDBC_USER:
+            JDBC_PASS:
+            ADMIN_GROUP:
+
+        ports:
+            - '8080:8080'
+        links:
+            - db
+
+    db:
+        platform: linux/x86_64
+        image: mysql:8.0.33
+        restart: always
+        environment:
+            MYSQL_DATABASE:
+            MYSQL_USER:
+            MYSQL_PASSWORD:
+            MYSQL_RANDOM_ROOT_PASSWORD:
+
+        expose:
+            - '3306'
+        volumes:
+            - testbed-db:/var/lib/mysql
+volumes:
+    testbed-db:

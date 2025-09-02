@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>
+  {{title}}
+</h1>
+
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+    <mat-form-field appearance="fill">
+      <mat-label>Rationale / Activity Report</mat-label>
+
+      <textarea
+        matInput
+        placeholder="Rationale / Activity Report"
+        [formControl]="form.controls['rationale']"
+        required>
+      </textarea>
+    </mat-form-field>
+
+    <div class="form-controls">
+      <button mat-raised-button color="primary" type="submit">
+        Save
+      </button>
+
+      <button mat-raised-button type="button" class="horizontal-padding" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

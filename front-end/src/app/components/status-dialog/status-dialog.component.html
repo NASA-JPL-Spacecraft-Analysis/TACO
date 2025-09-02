@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>{{title}}</h1>
+
+<mat-dialog-content>
+  <form [formGroup]="form">
+    <mat-form-field appearance="fill">
+      <mat-label>Status</mat-label>
+
+      <input matInput
+        placeholder="Status"
+        type="text"
+        [formControl]="form.controls['status']"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Color</mat-label>
+
+      <input matInput
+        placeholder="Color"
+        type="text"
+        [formControl]="form.controls['color']"
+        required
+      />
+
+      <span class="circle" [ngStyle]="{ backgroundColor: status.color }"></span>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Sort Order</mat-label>
+
+      <input matInput
+        placeholder="Sort Order"
+        type="number"
+        [formControl]="form.controls['sortOrder']"
+      />
+    </mat-form-field>
+
+    <div class="form-controls">
+      <button mat-raised-button color="accent" (click)="onSubmit(form.value)">
+        Save
+      </button>
+
+      <button mat-raised-button class="horizontal-padding" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

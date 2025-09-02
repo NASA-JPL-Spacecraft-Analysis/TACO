@@ -1,0 +1,108 @@
+<h1 mat-dialog-title>New Entry</h1>
+<mat-dialog-content>
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      
+      <textarea
+        matInput
+        placeholder="Description"
+        formControlName="description"
+      >
+      </textarea>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Status</mat-label>
+  
+      <mat-select (selectionChange)="onStatusChange($event)" *ngIf="itemStatuses" placeholder="Status" formControlName="status" required>
+        <mat-option *ngFor="let itemStatus of itemStatuses | keyvalue" [value]="itemStatus.value.id">
+          <span class="color-chip" [style.background-color]="itemStatus.value.color"></span>
+          {{itemStatus.value.status}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Version</mat-label>
+  
+      <input matInput
+        placeholder="Version"
+        type="text"
+        formControlName="version"
+        required
+      />
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Serial Number</mat-label>
+  
+      <input matInput
+        placeholder="Serial Number"
+        formControlName="serialNumber"
+        required
+      />
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Part Number</mat-label>
+  
+      <input matInput
+        placeholder="Part Number"
+        type="text"
+        formControlName="partNumber"
+        required
+      />
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Rationale / Activity Report</mat-label>
+      
+      <textarea
+        matInput
+        placeholder="Rationale / Activity Report"
+        formControlName="rationale"
+        required
+      >
+      </textarea>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Updated By</mat-label>
+  
+      <input matInput
+        placeholder="Username"
+        type="text"
+        formControlName="username"
+        required
+      />
+    </mat-form-field>
+
+    <ng-container *ngIf="data.editing">
+      <mat-form-field appearance="fill">
+        <mat-label>Updated</mat-label>
+    
+        <input matInput
+          placeholder="Updated"
+          type="datetime"
+          formControlName="updated"
+          required
+        />
+      </mat-form-field>
+    </ng-container>
+
+    <file-upload
+      (fileOutput)="onFileUpload($event)">
+    </file-upload>
+
+    <div class="form-controls">
+      <button mat-raised-button type="button" color="accent" (click)="onSubmit(form.value)">
+        Save
+      </button>
+
+      <button mat-raised-button type="button" class="horizontal-padding" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

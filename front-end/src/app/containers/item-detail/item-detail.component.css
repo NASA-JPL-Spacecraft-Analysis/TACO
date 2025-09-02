@@ -1,0 +1,15 @@
+.description-button {
+  position: fixed;
+  right: 0;
+  margin-right: 1em;
+  top: 129px;
+  z-index: 100;
+}
+
+.item-detail-container {
+  margin: 1em;
+}
+
+.item-details {
+  margin-bottom: 1em;
+}

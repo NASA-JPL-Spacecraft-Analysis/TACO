@@ -1,0 +1,31 @@
+<app-header
+  [testbeds]="testbeds">
+</app-header>
+
+<div class="history-container">
+  <ng-container *ngIf="filteredHistory; else noHistory">
+    <ng-container *ngIf="itemDataMap">
+      <div *ngIf="itemStatuses">
+        <button mat-raised-button class="export-button" color="primary" (click)="export()">Export</button>
+
+        <date-time-picker
+          [labelText]="'Filter Between'"
+          [minDate]="minDate"
+          (filter)="onFilter($event)">
+        </date-time-picker>
+
+        <history-table
+          [items]="itemDataMap"
+          [itemChanges]="filteredHistory"
+          [itemStatuses]="itemStatuses"
+          [hoveredImage]="hoveredImage"
+          (showImage)="toggleShowImage($event)">
+        </history-table>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #noHistory>
+    <div>There currently isn't any history, please add some changes and then come back.</div>
+  </ng-template>
+</div>

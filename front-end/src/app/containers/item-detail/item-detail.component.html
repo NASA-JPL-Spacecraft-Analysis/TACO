@@ -1,0 +1,40 @@
+<app-header
+  [testbeds]="testbeds">
+</app-header>
+
+<button mat-raised-button class="description-button" (click)="onDescriptionClick()">Description</button>
+
+<div class="item-detail-container" *ngIf="selectedItem">
+  <div class="item-details">
+    <span *ngIf="selectedItem.fullname; else name">
+      {{selectedItem.name}} ({{selectedItem.fullname}})
+    </span>
+
+    <ng-template #name>
+      {{selectedItem.name}}
+    </ng-template>
+  </div>
+
+  <div *ngIf="itemStatuses">
+    <div *ngIf="canEdit && userCanEdit">
+      <item-form 
+        [latestChange]="selectedItem.latestChange"
+        [itemStatuses]="itemStatuses"
+        [username]="username"
+        [canEdit]="!selectedItem.locked && (canEdit && userCanEdit)"
+        (openItemDataDialog)="onOpenItemDataDialog($event)">
+      </item-form>
+    </div>
+
+    <history-table
+      [canEdit]="!selectedItem.locked && (canEdit && userCanEdit)"
+      [itemChanges]="itemChanges"
+      [itemStatuses]="itemStatuses"
+      [username]="username"
+      [showActions]="true"
+      [hoveredImage]="hoveredImage"
+      (entryActions)="handleEntryAction($event)"
+      (showImage)="toggleShowImage($event)">
+    </history-table>
+  </div>
+</div>

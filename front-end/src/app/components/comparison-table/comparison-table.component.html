@@ -1,0 +1,51 @@
+<table mat-table [dataSource]="comparisonList" *ngIf="comparisonList && comparisonList.length > 0; else no_comparisons" class="mat-elevation-z2">
+  <ng-container matColumnDef="itemName">
+    <th mat-header-cell *matHeaderCellDef>Item Name</th>
+    <td mat-cell *matCellDef="let comparison">{{comparison.itemName}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="field">
+    <th mat-header-cell *matHeaderCellDef>Field</th>
+    <td mat-cell *matCellDef="let comparison">{{comparison.field}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="newValue">
+    <th mat-header-cell *matHeaderCellDef>New Value</th>
+    <td mat-cell *matCellDef="let comparison">
+      <span *ngIf="comparison.field === 'status'; else not_new_status">
+        {{getStatus(comparison.newValue)}}
+      </span>
+
+      <ng-template #not_new_status>
+        {{comparison.newValue}}
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="oldValue">
+    <th mat-header-cell *matHeaderCellDef>Old Value</th>
+    <td mat-cell *matCellDef="let comparison">
+      <span *ngIf="comparison.field === 'status'; else not_old_status">
+        {{getStatus(comparison.oldValue)}}
+      </span>
+
+      <ng-template #not_old_status>
+        {{comparison.oldValue}}
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="updated">
+    <th mat-header-cell *matHeaderCellDef>Updated</th>
+    <td mat-cell *matCellDef="let comparison">{{comparison.updated}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let rowData; columns: columnsToDisplay"></tr>
+</table>
+
+<ng-template #no_comparisons>
+  <p>Select a start and end date to see a comparison between those 2 points in time.</p>
+  <p>If you've selected two points in time but you don't see any data, then you've picked a range that doesn't contain any changes or your end time is before your start time.</p>
+  <p>Select different dates or times to see a comparison.</p>
+</ng-template>

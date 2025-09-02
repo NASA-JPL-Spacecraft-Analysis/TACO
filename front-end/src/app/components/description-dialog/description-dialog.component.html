@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>{{title}} Description</h1>
+
+<div mat-dialog-content>
+  <div *ngIf="!editing; else editMode">
+    <p [innerHTML]="data.description | insertLinkTags"></p>
+  </div>
+
+  <ng-template #editMode>
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+
+      <textarea matInput placeholder="Input some general information about your {{title}}." [formControl]="form.controls['description']"></textarea>
+    </mat-form-field>
+  </ng-template>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button class="cancel-button" (click)="onCancel()">
+    Close
+  </button>
+
+  <div *ngIf="!editing; else showSave">
+    <button mat-raised-button color="accent" (click)="onStartEdit()">
+      Edit Description
+    </button>
+  </div>
+
+  <ng-template #showSave>
+    <button mat-raised-button color="accent" class="submit-button" (click)="onSubmit(form.value.description)">
+      Save
+    </button>
+  </ng-template>
+</div>

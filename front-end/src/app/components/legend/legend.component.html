@@ -1,0 +1,13 @@
+<mat-card class="legend-card" *ngIf="itemStatuses">
+  <mat-card-content *ngIf="itemStatusList">
+    <div *ngFor="let status of itemStatusList">
+      <span class="color-chip" [style.background-color]="status.color"></span>
+      {{status.status}}
+    </div>
+
+    <div>
+      <span class="color-chip offline-chip"></span>
+      Offline
+    </div>
+  </mat-card-content>
+</mat-card>

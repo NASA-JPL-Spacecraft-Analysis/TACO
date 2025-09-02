@@ -1,0 +1,12 @@
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.cancel-button {
+  background-color: #e0e0e0;
+}
+
+.file-upload {
+  display: none;
+}
