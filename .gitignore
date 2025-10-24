@@ -1,12 +1,32 @@
-# Swap Files
-*.swp
-
-# OSX Files
+# Root-level ignores
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
 
-# Project Files
+# Logs
+logs/
+*.log
+*.gz
+
+# Environment files
 .env
+.env.local
+.env.*.local
+
+# Node.js backend
+backend/node_modules/
+backend/npm-debug.log*
+
+# Angular frontend
+front-end/node_modules/
+front-end/dist/
+front-end/build/
+front-end/.angular/
+front-end/.angular/cache/
+
+# Java Files
 .idea
 testbed-viz/.idea
-front-end/.angular
-front-end/package-lock.json
