@@ -39,4 +39,6 @@ const disconnect = async () => {
     }
 };
 
-export { client, disconnect };
+// Backwards-compatible named export used across the codebase
+// `getPrismaClient` was the expected name in some modules.
+export { client, disconnect, client as getPrismaClient };
