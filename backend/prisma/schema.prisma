@@ -1,0 +1,121 @@
+// Prisma Schema for Testbed Visualization
+// Migrated from Java/MySQL schema in database_setup.sql
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Core Testbed Model
+model Testbed {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique @db.VarChar(45)
+  acronym     String    @db.VarChar(45)
+  enabled     Int       @default(1) @db.TinyInt
+  description String?   @db.Text
+  sortOrder   Int?      @map("sort_order")
+
+  // Relations
+  settings    TestbedSettings?
+  statuses    ItemStatus[]
+  items       ItemMetadata[]
+
+  @@map("testbeds")
+}
+
+// Testbed Settings Model
+model TestbedSettings {
+  id                              Int      @id @default(autoincrement())
+  testbedId                       Int      @unique @map("testbed_id")
+  emailNotificationsList          String?  @map("email_notifications_list") @db.Text
+  recentlyChangedIndicatorEnabled Int?     @map("recently_changed_indicator_enabled") @db.TinyInt
+  recentlyChangedIndicatorDays    Int?     @map("recently_changed_indicator_days")
+  testbedEditGroup                String?  @map("testbed_edit_group") @db.VarChar(45)
+  autoRefreshEnabled              Int?     @map("auto_refresh_enabled") @db.TinyInt
+  autoRefreshInterval             Int?     @map("auto_refresh_interval")
+
+  // Relations
+  testbed     Testbed  @relation(fields: [testbedId], references: [id])
+
+  @@map("testbed_settings")
+}
+
+// Item Status Model (statuses available per testbed)
+model ItemStatus {
+  id        Int     @id @default(autoincrement())
+  testbedId Int     @map("testbed_id")
+  status    String  @db.VarChar(45)
+  color     String  @db.VarChar(45)
+  sortOrder Int?    @map("sort_order")
+
+  // Relations
+  testbed   Testbed @relation(fields: [testbedId], references: [id])
+
+  @@map("item_status")
+}
+
+// TODO: Future migration - Item Metadata (hierarchical tree structure)
+model ItemMetadata {
+  id          Int      @id @default(autoincrement())
+  testbedId   Int      @map("testbed_id")
+  parentId    Int?     @map("parent_id")
+  name        String   @db.VarChar(255)
+  fullname    String   @db.VarChar(255)
+  deleted     Int      @default(0) @db.TinyInt
+  online      Int      @default(1) @db.TinyInt
+  locked      Int      @default(0) @db.TinyInt
+  sortOrder   Int?     @map("sort_order")
+  description String?  @db.Text
+
+  // Relations
+  testbed     Testbed         @relation(fields: [testbedId], references: [id])
+  parent      ItemMetadata?   @relation("ItemHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children    ItemMetadata[]  @relation("ItemHierarchy")
+  changes     ItemChanges[]
+
+  @@map("item_metadata")
+}
+
+// TODO: Future migration - Item Changes (change history)
+model ItemChanges {
+  id           Int       @id @default(autoincrement())
+  itemId       Int       @map("item_id")
+  status       Int?
+  description  String?   @db.Text
+  version      String?   @db.VarChar(255)
+  serialNumber String?   @map("serial_number") @db.VarChar(255)
+  partNumber   String?   @map("part_number") @db.VarChar(255)
+  username     String    @db.VarChar(255)
+  updated      DateTime  @default(now()) @db.Timestamp(0)
+  rationale    String?   @db.Text
+  online       Int       @default(1) @db.TinyInt
+  image        Int?      @default(0) @db.TinyInt
+
+  // Relations
+  item         ItemMetadata @relation(fields: [itemId], references: [id])
+  images       Image[]
+
+  @@map("item_changes")
+}
+
+// TODO: Future migration - Images
+model Image {
+  id           Int          @id @default(autoincrement())
+  itemChangeId Int          @map("item_change_id")
+  image        Bytes        @db.LongBlob
+
+  // Relations
+  itemChange   ItemChanges  @relation(fields: [itemChangeId], references: [id])
+
+  @@map("images")
+}
+
+// TODO: Future migration - History/Audit Tables
+// - testbed_settings_history
+// - item_status_history
+// - item_metadata_history
+// - item_changes_history
