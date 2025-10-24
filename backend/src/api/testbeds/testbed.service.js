@@ -269,8 +269,9 @@ const updateTestbedSettings = async (testbedId, request, username) => {
     }
 };
 
+// canUserEdit,
 export {
-    canUserEdit,
+    
     createTestbed,
     getTestbedById,
     getTestbeds,

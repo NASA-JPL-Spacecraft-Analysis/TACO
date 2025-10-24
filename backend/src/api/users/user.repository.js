@@ -12,7 +12,7 @@
  * - testbed-viz/src/main/java/gov/nasa/jpl/clipper/auth/
  */
 
-import { getPrismaClient } from '../../config/database.js';
+import { getPrismaClient } from '../../db/prisma.js';
 import { logger } from '../../utils/logger.js';
 
 const prisma = getPrismaClient();
