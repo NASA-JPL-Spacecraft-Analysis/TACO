@@ -1,5 +1,5 @@
 import { createError } from './error.js';
-import userService from '../users/user.service.js';
+import * as userService from '../users/user.service.js';
 
 /**
  * Authentication Middleware
