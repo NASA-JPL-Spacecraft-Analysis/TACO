@@ -7,10 +7,10 @@
  * Replaces raw JDBC/PreparedStatements with Prisma queries
  */
 
-import { getPrismaClient } from '../../db/prisma.js';
+import { client } from '../../db/prisma.js';
 import { logger } from '../../utils/logger.js';
 
-const prisma = getPrismaClient();
+const prisma = client();
 
 /**
  * Get all enabled testbeds

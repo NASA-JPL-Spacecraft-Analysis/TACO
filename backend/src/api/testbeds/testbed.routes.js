@@ -9,7 +9,7 @@
 import express from 'express';
 import * as testbedService from './testbed.service.js';
 import * as testbedRepo from './testbed.repository.js';
-import { asyncHandler } from '../middleware/errorHandler.js';
+import { asyncHandler } from '../middleware/error.js';
 import { authenticate, requireAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
