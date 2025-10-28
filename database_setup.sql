@@ -39,7 +39,7 @@ CREATE TABLE `testbed_settings_history` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE `testbed-db`.`item_status_history` (
+CREATE TABLE `testbed`.`item_status_history` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `item_status_id` INT NOT NULL,
   `testbed_id` INT NOT NULL,

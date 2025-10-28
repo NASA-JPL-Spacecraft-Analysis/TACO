@@ -10,7 +10,9 @@
 import { getPrismaClient } from '../../db/prisma.js';
 import { logger } from '../../utils/logger.js';
 
-const prisma = getPrismaClient();
+// Do not call getPrismaClient() at module init time (it returns a Promise).
+// Resolve the client inside each async function to ensure it's connected
+// before use.
 
 /**
  * Get all enabled testbeds
@@ -18,7 +20,12 @@ const prisma = getPrismaClient();
  * Query: "select * from testbeds where enabled = '1'"
  */
 const getTestbeds = async () => {
+
+    console.log("Attempting to get testbeds")
+
     try {
+        const prisma = await getPrismaClient();
+
         return await prisma.testbed.findMany({
             where: { enabled: 1 },
             orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }]
@@ -36,6 +43,7 @@ const getTestbeds = async () => {
  */
 const getTestbedById = async (testbedId) => {
     try {
+        const prisma = await getPrismaClient();
         return await prisma.testbed.findUnique({
             where: { id: testbedId }
         });
@@ -53,6 +61,7 @@ const getTestbedById = async (testbedId) => {
  */
 const createTestbed = async (name, acronym) => {
     try {
+        const prisma = await getPrismaClient();
         return await prisma.testbed.create({
             data: { name, acronym }
         });
@@ -69,6 +78,7 @@ const createTestbed = async (name, acronym) => {
  */
 const updateTestbedDescription = async (testbedId, description) => {
     try {
+        const prisma = await getPrismaClient();
         await prisma.testbed.update({
             where: { id: testbedId },
             data: { description }
@@ -87,6 +97,7 @@ const updateTestbedDescription = async (testbedId, description) => {
  */
 const getTestbedSettings = async () => {
     try {
+        const prisma = await getPrismaClient();
         return await prisma.testbedSettings.findMany();
     } catch (error) {
         logger.error('Error fetching testbed settings', error);
@@ -101,6 +112,7 @@ const getTestbedSettings = async () => {
  */
 const getTestbedSettingsById = async (testbedId) => {
     try {
+        const prisma = await getPrismaClient();
         return await prisma.testbedSettings.findUnique({
             where: { testbedId }
         });
@@ -117,6 +129,7 @@ const getTestbedSettingsById = async (testbedId) => {
  */
 const createTestbedSettings = async (testbedId) => {
     try {
+        const prisma = await getPrismaClient();
         return await prisma.testbedSettings.create({
             data: { testbedId }
         });
@@ -134,6 +147,7 @@ const createTestbedSettings = async (testbedId) => {
 const updateTestbedSettings = async (testbedId, settings) => {
     try {
         // TODO: Insert into testbed_settings_history for audit trail
+        const prisma = await getPrismaClient();
         return await prisma.testbedSettings.update({
             where: { testbedId },
             data: settings
@@ -152,6 +166,7 @@ const updateTestbedSettings = async (testbedId, settings) => {
  */
 const createStatuses = async (testbedId, statuses) => {
     try {
+        const prisma = await getPrismaClient();
         const data = statuses.map((status) => ({
             testbedId,
             status: status.status,
@@ -174,6 +189,7 @@ const createStatuses = async (testbedId, statuses) => {
  */
 const getAllItemStatuses = async () => {
     try {
+        const prisma = await getPrismaClient();
         return await prisma.itemStatus.findMany({
             orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }]
         });
@@ -190,6 +206,7 @@ const getAllItemStatuses = async () => {
  */
 const getItemStatusesByTestbedId = async (testbedId) => {
     try {
+        const prisma = await getPrismaClient();
         return await prisma.itemStatus.findMany({
             where: { testbedId },
             orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }]
@@ -207,6 +224,7 @@ const getItemStatusesByTestbedId = async (testbedId) => {
 const createItemStatus = async (testbedId, statusData) => {
     try {
         // TODO: Insert into item_status_history for audit trail
+        const prisma = await getPrismaClient();
         return await prisma.itemStatus.create({
             data: {
                 testbedId,
@@ -228,6 +246,7 @@ const createItemStatus = async (testbedId, statusData) => {
 const updateItemStatus = async (statusId, statusData) => {
     try {
         // TODO: Insert into item_status_history for audit trail
+        const prisma = await getPrismaClient();
         return await prisma.itemStatus.update({
             where: { id: statusId },
             data: statusData
