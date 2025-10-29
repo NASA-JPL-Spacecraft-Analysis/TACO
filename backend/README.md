@@ -1,162 +1,248 @@
 # Testbed Visualization Backend
 
-Node.js + Express + Prisma backend for Testbed Visualization, incrementally migrated from Java.
+Node.js + Express + MySQl with Prisma
 
-## Migration Status
+## Quick Start
 
-### Completed Modules
+### 1. Install MySQL
 
-**Testbed Module**
-
-- Testbed CRUD operations
-- Testbed Settings management
-- Item Status management
-- RESTful API endpoints
-- Prisma database access
-- Error handling and logging
-
-**User Module**
-
-- User CRUD operations
-- User authentication and authorization
-- LDAP group validation
-- Admin role management
-
-**Authentication**
-
-- Protected admin endpoints
-- Authentication middleware
-
-### TODO: Future Modules
-
-- **Item Management** (hierarchical tree structure, snapshots, comparisons)
-- **Auth Integrations** (alternative authentication methods)
-- **Image Handling** (binary storage/retrieval)
-- **Email Notifications** (MailService)
-- **Audit Trail** (history tables for testbed_settings, item_status, etc.)
-
-## Project Structure
-
-```
-backend/
-├── src/
-│   ├── api/
-│   │   ├── middleware/
-│   │   │   ├── auth.js
-│   │   │   └── error.js
-│   │   ├── testbeds/
-│   │   │   ├── itemStatus.model.js
-│   │   │   ├── testbed.repository.js
-│   │   │   ├── testbed.routes.js
-│   │   │   ├── testbed.service.js
-│   │   │   └── testbedSettings.model.js
-│   │   └── users/
-│   │       ├── user.model.js
-│   │       ├── user.repository.js
-│   │       ├── user.routes.js
-│   │       └── user.service.js
-│   ├── db/
-│   │   └── prisma.js
-│   ├── utils/
-│   │   └── logger.js
-│   ├── app.js
-│   └── server.js
-├── prisma/
-│   └── schema.prisma
-├── .env.example
-├── package.json
-└── README.md
+```bash
+brew install mysql
+brew services start mysql
+mysql_secure_installation  # Optional but recommended
 ```
 
-## Setup
+Create the database:
 
-### Prerequisites
+```bash
+mysql -u root -p
+CREATE DATABASE taco_db;
+exit;
+```
 
-- Node.js 18+
-- MySQL 8.0
-- Existing database from Java application (or run `database_setup.sql`)
+### 2. Setup Backend
 
-### Installation
+Install dependencies:
 
-1. **Install dependencies:**
+```bash
+npm install
+```
 
-    ```bash
-    npm install
-    ```
+Configure environment:
 
-2. **Configure environment:**
+```bash
+cp .env.example .env
+# Edit .env with your database credentials:
+# DATABASE_URL="mysql://root:password@localhost:3306/taco_db?authPlugin=caching_sha2_password""
+```
 
-    ```bash
-    cp .env.example .env
-    # Edit .env with your database credentials
-    ```
+Generate Prisma client and run migrations:
 
-3. **Generate Prisma client:**
+```bash
+npm run prisma:generate
+npm run prisma:migrate
+```
 
-    ```bash
-    npm run prisma:generate
-    ```
+### 3. Run the Server
 
-4. **Run migrations (optional - if using fresh database):**
-    ```bash
-    npm run prisma:migrate
-    ```
-
-### Running the Server
-
-**Development mode (with auto-reload):**
+Development mode (with auto-reload):
 
 ```bash
 npm run dev
 ```
 
-**Production mode:**
+Production mode:
 
 ```bash
 npm start
 ```
 
-Server runs on `http://localhost:3000` by default.
+Server runs on `http://localhost:3000`
+Health check: `http://localhost:3000/health`
 
-## API Endpoints
+## Architecture
+
+### Design Pattern
+
+**Repository Pattern** - Three-layer architecture:
+
+- **Routes** (`*.routes.js`) - HTTP endpoints, request/response handling
+- **Service** (`*.service.js`) - Application logic
+- **Repository** (`*.repository.js`) - Database access via Prisma
+
+```
+Request → Routes → Service → Repository → Prisma → Database
+```
+
+### Database Access
+
+**Prisma Client** - Singleton pattern in `src/db/prisma.js`:
+
+```javascript
+import { client } from '../../db/prisma.js';
+
+const getTestbeds = async () => {
+    const prisma = client();
+    return await prisma.testbed.findMany({...});
+};
+```
+
+Prisma auto-connects on first query. No manual connection management needed.
+
+### URL Structure
+
+All API routes prefixed with `/api`:
+
+```
+/api/testbeds              # Public endpoints
+/api/testbeds/:id/settings # Public endpoints
+/api/users                 # Admin endpoints
+...etc
+```
+
+**RESTful conventions:**
+
+- Plural resource names (`/testbeds` not `/testbed`)
+- HTTP verbs for operations (GET, POST, PUT, PATCH, DELETE)
+- Nested resources for relationships (`/testbeds/:id/settings`)
+
+### Error Handling
+
+**asyncHandler Pattern** - Wraps async route handlers to catch errors:
+
+```javascript
+router.get(
+    '/testbeds',
+    asyncHandler(async (req, res) => {
+        const testbeds = await service.getTestbeds();
+        res.json(testbeds);
+    })
+);
+```
+
+Without `asyncHandler`, unhandled promise rejections crash the server. The wrapper catches errors and forwards them to the error middleware.
 
 ### Authentication
 
-- `POST /api/users/login` - User login (returns JWT token)
-- `POST /api/users/logout` - User logout
-- `GET /api/users/me` - Get current user info (requires authentication)
+Currently uses `NO_AUTH` mode (mock user). Admin endpoints protected by `authenticate` middleware.
 
-### Public Endpoints
+Future: JWT-based auth with role-based access control.
 
-#### Testbeds
+## Frontend Integration
 
-- `GET /api/testbeds` - List all enabled testbeds with statuses
-- `GET /api/testbeds/:testbedId` - Get testbed by ID with items and statuses
-- `PATCH /api/testbeds/:testbedId` - Update testbed description
+**Important:** Frontend must be updated to use `/api` prefix for all backend calls.
 
-#### Settings
+Example:
 
-- `GET /api/testbeds/:testbedId/settings` - Get testbed settings
-- `GET /api/settings` - Get all testbed settings
+```typescript
+// Old
+this.http.get(baseUrl + '/testbeds');
 
-### Admin Endpoints (require authentication + admin role)
+// New
+this.http.get(baseUrl + '/api/testbeds');
+```
 
-#### Testbeds
+TODO: Update all frontend calls to use RESTful endpoints with `/api` prefix.
 
-- `POST /api/testbeds` - Create new testbed
-- `PUT /api/testbeds/:testbedId/settings` - Update testbed settings
-- `POST /api/testbeds/:testbedId/statuses` - Create item status
-- `PUT /api/testbeds/:testbedId/statuses/:statusId` - Update item status
+## Database Schema
 
-#### Users
+### Tables (via Prisma)
 
-- `GET /api/users` - List all users
-- `POST /api/users` - Create new user
-- `GET /api/users/:userId` - Get user by ID
-- `PUT /api/users/:userId` - Update user
-- `DELETE /api/users/:userId` - Delete user
+- `testbeds` - Testbed definitions
+- `testbed_settings` - Configuration per testbed
+- `item_status` - Status definitions per testbed
+- `item_metadata` - Item tree structure
+- `item_changes` - Change history
+- `images` - Binary image storage
+
+### Useful Commands
+
+View database in GUI:
+
+```bash
+npm run prisma:studio
+```
+
+After schema changes:
+
+```bash
+npm run prisma:generate
+```
+
+Create migration:
+
+```bash
+npx prisma migrate dev --name description_of_change
+```
+
+## API Endpoints
+
+### Public
+
+- `GET /api/testbeds` - List all testbeds
+- `GET /api/testbeds/:id` - Get testbed by ID
+- `GET /api/testbeds/:id/settings` - Get testbed settings
+- `PATCH /api/testbeds/:id` - Update testbed description
+
+### Admin (require auth)
+
+- `POST /api/testbeds` - Create testbed
+- `PUT /api/testbeds/:id/settings` - Update settings
+- `POST /api/testbeds/:id/statuses` - Create status
+- `PUT /api/testbeds/:id/statuses/:statusId` - Update status
+
+## Development
+
+### Code Style
+
+- ES6 modules (`import`/`export`)
+- Async/await for all async operations
+- Repository pattern for data access
+- Functional JavaScript over classes
+- Consistent error handling with try-catch + logger
+
+### Project Structure
+
+```
+backend/
+├── src/
+│   ├── api/
+│   │   ├── middleware/      # Auth, error handling
+│   │   ├── testbeds/        # Testbed module
+│   │   └── users/           # User module
+│   ├── db/
+│   │   └── prisma.js        # Prisma singleton
+│   ├── utils/
+│   │   └── logger.js        # Winston logger
+│   ├── app.js               # Express app setup
+│   └── server.js            # Server startup
+├── prisma/
+│   └── schema.prisma        # Database schema
+└── .env                     # Environment config
+```
+
+---
 
 ## Migration Notes
+
+### Status: Java → Node.js
+
+**Completed:**
+
+- Testbed CRUD operations
+- Testbed Settings management
+- Item Status management
+- Prisma database access
+- Error handling and logging
+- RESTful API endpoints
+
+**TODO:**
+
+- Item management (hierarchical tree, snapshots)
+- Image handling (binary storage)
+- Email notifications
+- Full authentication (JWT, LDAP)
+- Audit trail/history tables
 
 ### Java to Node.js Mappings
 
@@ -165,80 +251,16 @@ Server runs on `http://localhost:3000` by default.
 | `TestbedDaoImpl.java`      | `testbed.repository.js` |
 | `TestbedServiceImpl.java`  | `testbed.service.js`    |
 | `TestbedVizResource.java`  | `testbed.routes.js`     |
-| `UserDaoImpl.java`         | `user.repository.js`    |
-| `UserServiceImpl.java`     | `user.service.js`       |
-| `AuthService.java`         | `auth.js` middleware    |
-| `DatabaseUtil.java`        | `database.js` (Prisma)  |
-| `e.printStackTrace()`      | `logger.error()`        |
+| `DatabaseUtil.java`        | `prisma.js`             |
 | JDBC PreparedStatements    | Prisma queries          |
 | JAX-RS `@Path` annotations | Express routes          |
-| Jersey Response            | Express `res.json()`    |
+| `e.printStackTrace()`      | `logger.error()`        |
 
-### Key Improvements Over Java
+### Key Improvements
 
-1. **No manual SQL** - Prisma handles queries with type safety
-2. **Auto connection pooling** - Built into Prisma
-3. **Cleaner error handling** - Centralized error middleware
-4. **RESTful routes** - Removed `/v1`, consistent plural resource names
-5. **Environment config** - Centralized in `.env`
-6. **Async/await** - Modern async patterns (vs Java try-catch blocks)
-7. **JWT authentication** - Stateless token-based auth (TODO)
-
-### Authentication Implementation
-
-**TODO implementation:**
-
-- JWT-based authentication with configurable expiration
-- Role-based access control (admin/user roles)
-- LDAP group validation support
-- Password hashing with bcrypt
-
-**Java supported:**
-
-- CAM (Central Authentication Management)
-- CSSO_PROXY
-
-## Database Schema
-
-Prisma schema includes:
-
-### Current (Migrated)
-
-- `testbeds` - Testbed definitions
-- `testbed_settings` - Configuration per testbed
-- `item_status` - Status definitions per testbed
-
-### Defined (Ready for Migration)
-
-- `item_metadata` - Item tree structure
-- `item_changes` - Change history
-- `images` - Binary image storage
-
-### Future (TODO)
-
-- History/audit tables for tracking changes
-
-## Development
-
-### Database Tools
-
-**Prisma Studio (GUI):**
-
-```bash
-npm run prisma:studio
-```
-
-**Generate Prisma Client (after schema changes):**
-
-```bash
-npm run prisma:generate
-```
-
-### Code Style
-
-- ES6 modules (`import`/`export`)
-- Async/await for all async operations
-- Prettier for consistent formatting
-- Consistent error handling with try-catch + logger
-- Resource based folder structure
-- Functional JavaScript over Classes
+- Type-safe database queries via Prisma
+- Auto connection pooling
+- Centralized error handling
+- Modern async/await patterns
+- RESTful API design
+- Environment-based configuration

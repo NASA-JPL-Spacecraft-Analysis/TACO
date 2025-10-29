@@ -14,7 +14,7 @@ export class ItemService {
   constructor(private http: HttpClient) { }
 
   public getItemsByTestbedId(): Observable<TestbedToItemDataMap> {
-    return this.http.get<TestbedToItemDataMap>(baseUrl + '/item-data-map');
+    return this.http.get<TestbedToItemDataMap>(baseUrl + '/api/item-data-map');
   }
 
   public getHistory(testbedId: number): Observable<ItemChanges[]> {
@@ -22,15 +22,15 @@ export class ItemService {
   }
 
   public getItemChangesById(itemId: number): Observable<ItemChanges[]> {
-    return this.http.get<ItemChanges[]>(baseUrl + '/item-changes/' + itemId);
+    return this.http.get<ItemChanges[]>(baseUrl + '/api/item-changes/' + itemId);
   }
 
   public getItemData(testbedId: number): Observable<ItemDataMap> {
-    return this.http.get<ItemDataMap>(baseUrl + '/testbed/' + testbedId + '/item-data/');
+    return this.http.get<ItemDataMap>(baseUrl + '/api/testbed/' + testbedId + '/item-data/');
   }
 
   public getSnapshot(dateTime: string, testbedId: number): Observable<ItemData[]> {
-    let url = baseUrl + '/testbed/' + testbedId + '/snapshot';
+    let url = baseUrl + '/api/testbed/' + testbedId + '/snapshot';
 
     // If datetime is null, don't include it in our query.
     if (dateTime) {
@@ -45,49 +45,49 @@ export class ItemService {
   }
 
   public getTestbedSettings(): Observable<TestbedSettings[]> {
-    return this.http.get<TestbedSettings[]>(baseUrl + '/testbed-settings/');
+    return this.http.get<TestbedSettings[]>(baseUrl + '/api/testbed-settings/');
   }
 
   public createItemChanges(itemId: number, data: ItemChanges): Observable<ItemChanges> {
-    return this.http.post<ItemChanges>(baseUrl + '/item-changes/' + itemId, data);
+    return this.http.post<ItemChanges>(baseUrl + '/api/item-changes/' + itemId, data);
   }
 
   public putItemDescription(description: string, itemId: number): Observable<string> {
-    return this.http.put<string>(baseUrl + '/item-data/' + itemId + '/description', description, { responseType: 'text' as 'json' });
+    return this.http.put<string>(baseUrl + '/api/item-data/' + itemId + '/description', description, { responseType: 'text' as 'json' });
   }
 
   public putTestbedDescription(description: string, testbedId: number): Observable<string> {
-    return this.http.put<string>(baseUrl + '/testbed/' + testbedId + '/description', description, { responseType: 'text' as 'json' });
+    return this.http.put<string>(baseUrl + '/api/testbed/' + testbedId + '/description', description, { responseType: 'text' as 'json' });
   }
 
   public toggleOnline(item: ItemData): Observable<ItemData> {
-    return this.http.put<ItemData>(baseUrl + '/toggle-online/' + item.id, item);
+    return this.http.put<ItemData>(baseUrl + '/api/toggle-online/' + item.id, item);
   }
 
   public toggleEnabled(item: ItemData): Observable<ItemData> {
-    return this.http.put<ItemData>(baseUrl + '/toggle-enabled/' + item.id, item);
+    return this.http.put<ItemData>(baseUrl + '/api/toggle-enabled/' + item.id, item);
   }
 
   public deleteItemChanges(id: number): Observable<number> {
-    return this.http.delete<number>(baseUrl + '/item-changes/' + id);
+    return this.http.delete<number>(baseUrl + '/api/item-changes/' + id);
   }
 
   public getImage(itemChangesId: number): Observable<File> {
-    return this.http.get<File>(baseUrl + '/image/' + itemChangesId, { responseType: 'blob' as 'json' });
+    return this.http.get<File>(baseUrl + '/api/image/' + itemChangesId, { responseType: 'blob' as 'json' });
   }
 
   public saveImage(itemChangeId: number, image: File): Observable<void> {
     const formData = new FormData();
     formData.append('file', image, image.name);
 
-    return this.http.post<void>(baseUrl + '/image/' + itemChangeId, formData);
+    return this.http.post<void>(baseUrl + '/api/image/' + itemChangeId, formData);
   }
 
   private getHistoryHttp(testbedId: number): Observable<ItemChanges[]> {
-    return this.http.get<ItemChanges[]>(baseUrl + '/history/' + testbedId);
+    return this.http.get<ItemChanges[]>(baseUrl + '/api/history/' + testbedId);
   }
 
   private getTestbedsHttp(): Observable<Testbed[]> {
-    return this.http.get<Testbed[]>(baseUrl + '/testbeds');
+    return this.http.get<Testbed[]>(baseUrl + '/api/testbeds');
   }
 }

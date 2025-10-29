@@ -7,10 +7,11 @@
  */
 
 import express from 'express';
+
 import * as testbedService from './testbed.service.js';
 import * as testbedRepo from './testbed.repository.js';
 import { asyncHandler } from '../middleware/error.js';
-import { authenticate, requireAdmin } from '../middleware/auth.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -123,7 +124,6 @@ router.get(
 router.post(
     '/testbeds',
     authenticate,
-    requireAdmin,
     asyncHandler(async (req, res) => {
         const { name, acronym, description, statuses, items } = req.body;
 
@@ -152,7 +152,6 @@ router.post(
 router.put(
     '/testbeds/:testbedId/settings',
     authenticate,
-    requireAdmin,
     asyncHandler(async (req, res) => {
         const testbedId = parseInt(req.params.testbedId, 10);
         const username = req.user.userId; // From auth middleware
@@ -172,7 +171,6 @@ router.put(
 router.post(
     '/testbeds/:testbedId/statuses',
     authenticate,
-    requireAdmin,
     asyncHandler(async (req, res) => {
         const testbedId = parseInt(req.params.testbedId, 10);
         const { status, color, sortOrder } = req.body;
@@ -200,7 +198,6 @@ router.post(
 router.put(
     '/testbeds/:testbedId/statuses/:statusId',
     authenticate,
-    requireAdmin,
     asyncHandler(async (req, res) => {
         const statusId = parseInt(req.params.statusId, 10);
         const { status, color, sortOrder } = req.body;
