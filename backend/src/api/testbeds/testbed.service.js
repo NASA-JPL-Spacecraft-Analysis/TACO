@@ -21,9 +21,9 @@ const getTestbeds = async () => {
         const testbeds = await testbedRepo.getTestbeds();
         const allStatuses = await testbedRepo.getAllItemStatuses();
 
-        console.log("trying to print testbeds");
+        console.log('trying to print testbeds');
         console.log(testbeds);
-        console.log("after print")
+        console.log('after print');
 
         // Group statuses by testbedId
         const statusesByTestbedId = new Map();
@@ -44,7 +44,6 @@ const getTestbeds = async () => {
 
         // Map testbeds and add statuses (including default "Not Present/Absent")
         return testbeds.map((testbed) => {
-
             const { id, name, acronym, description, sortOrder, enabled } = testbed;
             const statuses = statusesByTestbedId.get(id) || [];
 
@@ -62,9 +61,7 @@ const getTestbeds = async () => {
                 sortOrder,
                 enabled,
                 statuses
-            }
-
-            );
+            });
 
             return {
                 id,
@@ -76,8 +73,6 @@ const getTestbeds = async () => {
                 statuses
             };
         });
-
-
     } catch (error) {
         logger.error('Error in getTestbeds service', error);
         throw error;
@@ -292,7 +287,6 @@ const updateTestbedSettings = async (testbedId, request, username) => {
 
 // canUserEdit,
 export {
-    
     createTestbed,
     getTestbedById,
     getTestbeds,

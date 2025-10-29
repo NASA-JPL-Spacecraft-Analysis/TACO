@@ -12,14 +12,18 @@
  * - testbed-viz/src/main/java/gov/nasa/jpl/clipper/auth/
  */
 
-import { getPrismaClient } from '../../db/prisma.js';
+import { client } from '../../db/prisma.js';
 import { logger } from '../../utils/logger.js';
-
-const prisma = getPrismaClient();
 
 /**
  * Placeholder repository methods
  * TODO: Implement as needed based on authentication decisions
+ *
+ * Usage pattern:
+ * const getUserById = async (userId) => {
+ *     const prisma = client();
+ *     return await prisma.user.findUnique({ where: { id: userId } });
+ * };
  */
 
 export default {

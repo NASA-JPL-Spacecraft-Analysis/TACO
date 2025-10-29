@@ -1,33 +1,28 @@
 import { PrismaClient } from '@prisma/client';
 import { logger } from '../utils/logger.js';
 
-/**
- * Prisma Client Singleton
- * Replaces Java's DatabaseUtil.getDataSource() pattern
- */
 let prisma;
-let connection;
 
-const client = async () => {
+/**
+ * Returns a singleton PrismaClient instance.
+ *
+ * This function ensures that only one PrismaClient is created during
+ * the application's lifetime. PrismaClient internally manages a connection
+ * pool to the database. Calling this function multiple times returns
+ * the same client instance, preventing excess connections.
+ *
+ * Usage:
+ * const prisma = client();
+ * const users = await prisma.user.findMany();
+ *
+ * @returns {PrismaClient} The singleton PrismaClient instance.
+ */
+const client = () => {
     if (!prisma) {
-        if (!connection) {
-            connection = (async () => {
-                try {
-                    prisma = new PrismaClient({
-                        log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
-                    });
-                    await prisma.$connect();
-                    logger.info('Database connected');
-                    return prisma;
-                } catch (error) {
-                    logger.error('Database connection failed:', error);
-                    prisma = null;
-                    connection = null;
-                    throw error;
-                }
-            })();
-        }
-        await connection;
+        prisma = new PrismaClient({
+            log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error']
+        });
+        logger.info('Prisma client initialized');
     }
     return prisma;
 };
@@ -36,9 +31,8 @@ const disconnect = async () => {
     if (prisma) {
         await prisma.$disconnect();
         logger.info('Database disconnected');
+        prisma = null;
     }
 };
 
-// Backwards-compatible named export used across the codebase
-// `getPrismaClient` was the expected name in some modules.
-export { client, disconnect, client as getPrismaClient };
+export { client, disconnect };

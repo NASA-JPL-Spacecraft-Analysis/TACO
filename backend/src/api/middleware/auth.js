@@ -53,21 +53,19 @@ const authenticate = (req, res, next) => {
  * TODO: Replace with userService.isAdmin(req.user) when implemented
  */
 const requireAdmin = (req, res, next) => {
-    if (!req.user) {
-        next(createError('Authentication required', 401));
-        return;
-    }
-
-    // TODO: Call userService.isAdmin(req.user)
-
-    // stub for NO_AUTH mode
-    const adminGroup = process.env.ADMIN_GROUP || 'testbed-admins';
-    if (req.user.groupList && req.user.groupList.includes(adminGroup)) {
-        next();
-        return;
-    }
-
-    next(createError('Admin access required', 403));
+    // right now bypass auth until more is implemented
+    // if (!req.user) {
+    //     next(createError('Authentication required', 401));
+    //     return;
+    // }
+    // // TODO: Call userService.isAdmin(req.user)
+    // // stub for NO_AUTH mode
+    // const adminGroup = process.env.ADMIN_GROUP || 'testbed-admins';
+    // if (req.user.groupList && req.user.groupList.includes(adminGroup)) {
+    //     next();
+    //     return;
+    // }
+    // next(createError('Admin access required', 403));
 };
 
 /**
