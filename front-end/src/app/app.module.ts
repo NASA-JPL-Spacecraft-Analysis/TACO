@@ -33,57 +33,50 @@ import { ConfirmationDialogModule, ConfirmationDialogComponent } from './compone
 import { MaterialModule } from './material';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    AppRoutingModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    ConfirmationDialogModule,
-    StatusDialogModule,
-    MaterialModule,
-    MessageDialogModule,
-    ItemFormDialogModule,
-    ItemDataDialogModule,
-    EffectsModule.forRoot([
-      ItemEffects,
-      OutputEffects,
-      NavEffects,
-      SnapshotEffects,
-      StructureEffects,
-      TestbedEffects,
-      ToastEffects,
-      UserEffects
-    ]),
-    HttpClientModule,
-    StoreModule.forRoot(ROOT_REDUCERS, {
-      metaReducers
-    }),
-    StoreRouterConnectingModule.forRoot({
-      routerState: RouterState.Minimal,
-      serializer: RouterSerializer
-    }),
-    ToastrModule.forRoot({
-      countDuplicates: true,
-      maxOpened: 4,
-      preventDuplicates: true,
-      resetTimeoutOnDuplicate: true
-    }),
-    ContainersModule
-  ],
-  entryComponents: [
-    ConfirmationDialogComponent,
-    ItemFormDialogComponent,
-    ItemDataDialogComponent,
-    MessageDialogComponent,
-    StatusDialogComponent
-  ],
-  providers: [
-    AdminGuard
-  ],
-  bootstrap: [
-    AppComponent
-  ]
+    declarations: [
+        AppComponent
+    ],
+    imports: [
+        AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        ConfirmationDialogModule,
+        StatusDialogModule,
+        MaterialModule,
+        MessageDialogModule,
+        ItemFormDialogModule,
+        ItemDataDialogModule,
+        EffectsModule.forRoot([
+            ItemEffects,
+            OutputEffects,
+            NavEffects,
+            SnapshotEffects,
+            StructureEffects,
+            TestbedEffects,
+            ToastEffects,
+            UserEffects
+        ]),
+        HttpClientModule,
+        StoreModule.forRoot(ROOT_REDUCERS, {
+            metaReducers
+        }),
+        StoreRouterConnectingModule.forRoot({
+            routerState: RouterState.Minimal,
+            serializer: RouterSerializer
+        }),
+        ToastrModule.forRoot({
+            countDuplicates: true,
+            maxOpened: 4,
+            preventDuplicates: true,
+            resetTimeoutOnDuplicate: true
+        }),
+        ContainersModule
+    ],
+    providers: [
+        AdminGuard
+    ],
+    bootstrap: [
+        AppComponent
+    ]
 })
 export class AppModule {}
