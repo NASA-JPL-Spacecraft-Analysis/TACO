@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ItemData } from '../../models';
@@ -15,13 +15,13 @@ export class ItemDataDialogData {
   styleUrls: [ 'item-data-dialog.component.css' ]
 })
 export class ItemDataDialogComponent implements OnInit {
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public itemData: ItemData;
   public testbedItemList: ItemData[];
   public title: string;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     public dialogRef: MatDialogRef<ItemDataDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ItemDataDialogData
   ) {}
@@ -34,19 +34,19 @@ export class ItemDataDialogComponent implements OnInit {
       this.title = 'New Component';
 
       this.form = this.formBuilder.group({
-        name: new FormControl('', [ Validators.required ]),
-        fullname: new FormControl('', [ Validators.required ]),
-        sortOrder: new FormControl(),
-        parentId: new FormControl()
+        name: new UntypedFormControl('', [ Validators.required ]),
+        fullname: new UntypedFormControl('', [ Validators.required ]),
+        sortOrder: new UntypedFormControl(),
+        parentId: new UntypedFormControl()
       });
     } else {
       this.title = 'Modify Component';
 
       this.form = this.formBuilder.group({
-        name: new FormControl(this.itemData.name, [ Validators.required ]),
-        fullname: new FormControl(this.itemData.fullname, [ Validators.required ]),
-        sortOrder: new FormControl(this.itemData.sortOrder),
-        parentId: new FormControl(this.itemData.parentId)
+        name: new UntypedFormControl(this.itemData.name, [ Validators.required ]),
+        fullname: new UntypedFormControl(this.itemData.fullname, [ Validators.required ]),
+        sortOrder: new UntypedFormControl(this.itemData.sortOrder),
+        parentId: new UntypedFormControl(this.itemData.parentId)
       });
     }
   }

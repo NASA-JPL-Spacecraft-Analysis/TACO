@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Inject, NgModule, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialModule } from 'src/app/material';
 
@@ -16,13 +16,13 @@ export class DescriptionDialogComponent implements OnInit {
   @Output() public saveOutput: EventEmitter<string>;
 
   public editing: boolean;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public title: string;
 
   constructor(
     public dialogRef: MatDialogRef<DescriptionDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Testbed | ItemData,
-    private formBuilder: FormBuilder
+    private formBuilder: UntypedFormBuilder
   ) {
     this.saveOutput = new EventEmitter<string>();
 
@@ -36,7 +36,7 @@ export class DescriptionDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     this.form = this.formBuilder.group({
-      description: new FormControl(this.data.description)
+      description: new UntypedFormControl(this.data.description)
     });
 
     // Default editing to true if there isn't a description.

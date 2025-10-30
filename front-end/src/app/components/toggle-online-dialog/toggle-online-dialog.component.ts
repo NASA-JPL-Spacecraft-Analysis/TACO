@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, NgModule, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormGroup, FormsModule, FormControl, Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormGroup, FormsModule, UntypedFormControl, Validators, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ItemChanges, ItemData } from 'src/app/models';
@@ -18,7 +18,7 @@ interface ToggleOnlineDialogData {
   templateUrl: 'toggle-online-dialog.component.html'
 })
 export class ToggleOnlineDialogComponent implements OnInit {
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public title: string;
 
   private itemChanges: ItemChanges;
@@ -26,7 +26,7 @@ export class ToggleOnlineDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ToggleOnlineDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ToggleOnlineDialogData,
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
   ) {}
 
   public ngOnInit(): void {
@@ -59,7 +59,7 @@ export class ToggleOnlineDialogComponent implements OnInit {
     };
 
     this.form = this.formBuilder.group({
-      rationale: new FormControl(this.itemChanges.rationale, [ Validators.required ])
+      rationale: new UntypedFormControl(this.itemChanges.rationale, [ Validators.required ])
     });
   }
 

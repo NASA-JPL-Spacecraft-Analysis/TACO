@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, UntypedFormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MaterialModule } from 'src/app/material';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -12,13 +12,13 @@ import { ItemStatus } from '../../models';
   templateUrl: 'status-dialog.component.html',
 })
 export class StatusDialogComponent implements OnInit {
-  public form: FormGroup;
+  public form: UntypedFormGroup;
   public title: string;
 
   constructor(
     public dialogRef: MatDialogRef<StatusDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public status: ItemStatus,
-    private formBuilder: FormBuilder) {}
+    private formBuilder: UntypedFormBuilder) {}
 
   public ngOnInit(): void {
     if (!this.status) {
@@ -38,9 +38,9 @@ export class StatusDialogComponent implements OnInit {
     this.title += ' Item Status'
 
     this.form = this.formBuilder.group({
-      color: new FormControl(this.status.color, [ Validators.required ]),
-      sortOrder: new FormControl(this.status.sortOrder),
-      status: new FormControl(this.status.status, [ Validators.required ])
+      color: new UntypedFormControl(this.status.color, [ Validators.required ]),
+      sortOrder: new UntypedFormControl(this.status.sortOrder),
+      status: new UntypedFormControl(this.status.status, [ Validators.required ])
     });
   }
 

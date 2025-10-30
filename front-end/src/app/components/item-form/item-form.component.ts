@@ -5,7 +5,7 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 import { ItemChanges, NumberTMap, ItemStatus } from '../../models';
 
@@ -22,11 +22,11 @@ export class ItemFormComponent {
   @Input() public username: string;
 
   @Output() public openItemDataDialog: EventEmitter<ItemChanges>;
-  @Output() public isFormDirty: EventEmitter<FormGroup>;
+  @Output() public isFormDirty: EventEmitter<UntypedFormGroup>;
 
   constructor() {
     this.openItemDataDialog = new EventEmitter<ItemChanges>();
-    this.isFormDirty = new EventEmitter<FormGroup>();
+    this.isFormDirty = new EventEmitter<UntypedFormGroup>();
   }
 
   public openDialog(): void {

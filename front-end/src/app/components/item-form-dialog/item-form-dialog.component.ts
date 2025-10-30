@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Inject, HostListener, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
 import { MatSelectChange } from '@angular/material/select';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { isEqual } from 'lodash';
@@ -17,12 +17,12 @@ import { StateTrackerConstants } from '../../consts/StateTrackerConstants';
 export class ItemFormDialogComponent implements OnInit {
   public changes: ItemChanges;
   public itemStatuses: NumberTMap<ItemStatus>;
-  public form: FormGroup;
+  public form: UntypedFormGroup;
 
   private image: File;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private validationService: ValidationService,
     public dialogRef: MatDialogRef<ItemFormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ItemFormDialogData
@@ -55,13 +55,13 @@ export class ItemFormDialogComponent implements OnInit {
     }
 
     this.form = this.formBuilder.group({
-      status: new FormControl(this.validationService.numberOrNull(changes.status), [ Validators.required ]),
-      description: new FormControl(changes.description),
-      version: new FormControl(changes.version, [ Validators.required ]),
-      serialNumber: new FormControl(changes.serialNumber, [ Validators.required ]),
-      partNumber: new FormControl(changes.partNumber, [ Validators.required ]),
-      username: new FormControl(changes.username, [ Validators.required ]),
-      rationale: new FormControl('', [ Validators.required ]),
+      status: new UntypedFormControl(this.validationService.numberOrNull(changes.status), [ Validators.required ]),
+      description: new UntypedFormControl(changes.description),
+      version: new UntypedFormControl(changes.version, [ Validators.required ]),
+      serialNumber: new UntypedFormControl(changes.serialNumber, [ Validators.required ]),
+      partNumber: new UntypedFormControl(changes.partNumber, [ Validators.required ]),
+      username: new UntypedFormControl(changes.username, [ Validators.required ]),
+      rationale: new UntypedFormControl('', [ Validators.required ]),
     });
 
     // in the case that "Not Present/Absent" was previously selected
@@ -74,23 +74,23 @@ export class ItemFormDialogComponent implements OnInit {
     // Check if "Not Present/Absent" is selected.
     if (!event.value || event.value === StateTrackerConstants.NOT_PRESENT_STATUS_ID) {
       this.form = this.formBuilder.group({
-        status: new FormControl(value.status, [ Validators.required ]),
-        description: new FormControl(value.description, [ Validators.required ]),
-        version: new FormControl({ value: '', disabled: true }),
-        serialNumber: new FormControl({ value: '', disabled: true }),
-        partNumber: new FormControl({ value: '', disabled: true }),
-        username: new FormControl(value.username, [ Validators.required ]),
-        rationale: new FormControl(value.rationale, [ Validators.required ]),
+        status: new UntypedFormControl(value.status, [ Validators.required ]),
+        description: new UntypedFormControl(value.description, [ Validators.required ]),
+        version: new UntypedFormControl({ value: '', disabled: true }),
+        serialNumber: new UntypedFormControl({ value: '', disabled: true }),
+        partNumber: new UntypedFormControl({ value: '', disabled: true }),
+        username: new UntypedFormControl(value.username, [ Validators.required ]),
+        rationale: new UntypedFormControl(value.rationale, [ Validators.required ]),
       });
     } else {
       this.form = this.formBuilder.group({
-        status: new FormControl(this.validationService.numberOrNull(value.status), [ Validators.required ]),
-        description: new FormControl(value.description),
-        version: new FormControl(value.version, [ Validators.required ]),
-        serialNumber: new FormControl(value.serialNumber, [ Validators.required ]),
-        partNumber: new FormControl(value.partNumber, [ Validators.required ]),
-        username: new FormControl(value.username, [ Validators.required ]),
-        rationale: new FormControl(value.rationale, [ Validators.required ]),
+        status: new UntypedFormControl(this.validationService.numberOrNull(value.status), [ Validators.required ]),
+        description: new UntypedFormControl(value.description),
+        version: new UntypedFormControl(value.version, [ Validators.required ]),
+        serialNumber: new UntypedFormControl(value.serialNumber, [ Validators.required ]),
+        partNumber: new UntypedFormControl(value.partNumber, [ Validators.required ]),
+        username: new UntypedFormControl(value.username, [ Validators.required ]),
+        rationale: new UntypedFormControl(value.rationale, [ Validators.required ]),
       });
     }
 
@@ -162,9 +162,9 @@ export class ItemFormDialogComponent implements OnInit {
   private addEditingFields(): void {
     // Only set rationale if the change is being edited.
     if (this.data.editing) {
-      this.form.addControl('id', new FormControl(this.changes.id));
-      this.form.addControl('itemId', new FormControl(this.changes.itemId));
-      this.form.addControl('updated', new FormControl(this.changes.updated));
+      this.form.addControl('id', new UntypedFormControl(this.changes.id));
+      this.form.addControl('itemId', new UntypedFormControl(this.changes.itemId));
+      this.form.addControl('updated', new UntypedFormControl(this.changes.updated));
       this.form.controls['rationale'].setValue(this.changes.rationale);
     }
   }
@@ -176,13 +176,13 @@ export class ItemFormDialogComponent implements OnInit {
       const currentUsername = this.form.value.username;
 
       const newForm = this.formBuilder.group({
-        status: new FormControl(this.form.value.status, [ Validators.required ]),
-        description: new FormControl(this.form.value.description, [ Validators.required ]),
-        version: new FormControl({ value: '', disabled: true }),
-        serialNumber: new FormControl({ value: '', disabled: true }),
-        partNumber: new FormControl({ value: '', disabled: true }),
-        username: new FormControl(currentUsername, [ Validators.required ]),
-        rationale: new FormControl(this.form.value.rationale, [ Validators.required ])
+        status: new UntypedFormControl(this.form.value.status, [ Validators.required ]),
+        description: new UntypedFormControl(this.form.value.description, [ Validators.required ]),
+        version: new UntypedFormControl({ value: '', disabled: true }),
+        serialNumber: new UntypedFormControl({ value: '', disabled: true }),
+        partNumber: new UntypedFormControl({ value: '', disabled: true }),
+        username: new UntypedFormControl(currentUsername, [ Validators.required ]),
+        rationale: new UntypedFormControl(this.form.value.rationale, [ Validators.required ])
       });
 
       this.form = newForm;
