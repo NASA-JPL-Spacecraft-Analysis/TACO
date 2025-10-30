@@ -63,7 +63,7 @@ export const routes: Routes = [
     RouterModule
   ],
   imports: [
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })
+    RouterModule.forRoot(routes, {})
   ]
 })
 export class AppRoutingModule {}
