@@ -10,3 +10,5 @@
 testbed-viz/.idea
 front-end/.angular
 front-end/package-lock.json
+
+backend/node_modules
