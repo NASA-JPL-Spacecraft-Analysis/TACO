@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, NgModule, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 
 import { StateTrackerConstants } from '../../../consts/StateTrackerConstants';
