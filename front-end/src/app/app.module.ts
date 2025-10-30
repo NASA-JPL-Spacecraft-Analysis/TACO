@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
@@ -32,12 +32,12 @@ import { ContainersModule } from './containers';
 import { ConfirmationDialogModule, ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { MaterialModule } from './material';
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent
     ],
-    imports: [
-        AppRoutingModule,
+    bootstrap: [
+        AppComponent
+    ], imports: [AppRoutingModule,
         BrowserModule,
         BrowserAnimationsModule,
         ConfirmationDialogModule,
@@ -56,7 +56,6 @@ import { MaterialModule } from './material';
             ToastEffects,
             UserEffects
         ]),
-        HttpClientModule,
         StoreModule.forRoot(ROOT_REDUCERS, {
             metaReducers
         }),
@@ -70,13 +69,8 @@ import { MaterialModule } from './material';
             preventDuplicates: true,
             resetTimeoutOnDuplicate: true
         }),
-        ContainersModule
-    ],
-    providers: [
-        AdminGuard
-    ],
-    bootstrap: [
-        AppComponent
-    ]
-})
+        ContainersModule], providers: [
+        AdminGuard,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {}
