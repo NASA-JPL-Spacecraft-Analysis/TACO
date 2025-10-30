@@ -8,7 +8,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { ItemChanges, ItemData, EntryAction, NumberTMap, ItemStatus } from '../../models';

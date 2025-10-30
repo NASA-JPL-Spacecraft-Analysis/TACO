@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, Inject, HostListener, OnInit } from '@angular/core';
 import { UntypedFormGroup, UntypedFormBuilder, UntypedFormControl, Validators } from '@angular/forms';
-import { MatLegacySelectChange as MatSelectChange } from '@angular/material/legacy-select';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatSelectChange } from '@angular/material/select';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { isEqual } from 'lodash';
 
 import { ItemChanges, NumberTMap, ItemStatus, ItemFormDialogData } from '../../models';

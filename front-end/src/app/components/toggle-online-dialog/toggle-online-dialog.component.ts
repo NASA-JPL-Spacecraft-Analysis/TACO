@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, NgModule, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UntypedFormGroup, FormsModule, UntypedFormControl, Validators, UntypedFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { ItemChanges, ItemData } from 'src/app/models';
 import { MaterialModule } from 'src/app/material';
