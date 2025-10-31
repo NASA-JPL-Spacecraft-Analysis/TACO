@@ -21,10 +21,6 @@ const getTestbeds = async () => {
         const testbeds = await testbedRepo.getTestbeds();
         const allStatuses = await testbedRepo.getAllItemStatuses();
 
-        console.log('trying to print testbeds');
-        console.log(testbeds);
-        console.log('after print');
-
         // Group statuses by testbedId
         const statusesByTestbedId = new Map();
         allStatuses.forEach((status) => {
@@ -40,7 +36,7 @@ const getTestbeds = async () => {
             statusesByTestbedId.set(status.testbedId, existing);
         });
 
-        console.log(allStatuses);
+        // console.log(allStatuses);
 
         // Map testbeds and add statuses (including default "Not Present/Absent")
         return testbeds.map((testbed) => {
@@ -53,15 +49,15 @@ const getTestbeds = async () => {
                 testbedId: id
             });
 
-            console.log({
-                id,
-                name,
-                acronym,
-                description,
-                sortOrder,
-                enabled,
-                statuses
-            });
+            // console.log({
+            //     id,
+            //     name,
+            //     acronym,
+            //     description,
+            //     sortOrder,
+            //     enabled,
+            //     statuses
+            // });
 
             return {
                 id,

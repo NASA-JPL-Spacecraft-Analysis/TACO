@@ -125,7 +125,13 @@ router.post(
     '/testbeds',
     authenticate,
     asyncHandler(async (req, res) => {
-        const { name, acronym, description, statuses, items } = req.body;
+
+        const { statuses, testbedStructure } = req.body;
+
+        const name = testbedStructure.name;
+        const acronym = testbedStructure.acronym;
+        const description = testbedStructure.description;
+        const items = testbedStructure.items;
 
         if (!name || !acronym) {
             return res.status(400).json({ error: 'Name and acronym are required' });
