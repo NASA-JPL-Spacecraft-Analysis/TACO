@@ -20,7 +20,7 @@
   </mat-toolbar>
 
   <ng-container *ngIf="testbedList.length > 0">
-    <nav mat-tab-nav-bar>
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel">
       <ng-container *ngFor="let testbed of testbedList">
           <a mat-tab-link
             [routerLink]="'/testbed/' + testbed.id"
@@ -38,6 +38,7 @@
         <mat-icon svgIcon="add" class="add-icon"></mat-icon>
       </a>
     </nav>
+    <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
 
     <div *ngIf="currentTestbed" class="sub-nav-buttons">
       <div>
@@ -64,13 +65,13 @@
       </div>
 
       <mat-slider *ngIf="showVizActions"
-        invert="true"
         [max]="maxRecentlyChangedValue"
-        [value]="recentlyChangedDays"
-        thumbLabel="true"
+        [displayWith]="formatLabel"
         matTooltip="Drag to see recently changed items"
-        matTooltipPosition="right"
-        (change)="onSliderChange($event.value)">
+        matTooltipPosition="right">
+        <input matSliderThumb
+          [value]="recentlyChangedDays"
+          (valueChange)="onSliderChange($event)">
       </mat-slider>
 
       <div class="viz-buttons" *ngIf="showVizActions">

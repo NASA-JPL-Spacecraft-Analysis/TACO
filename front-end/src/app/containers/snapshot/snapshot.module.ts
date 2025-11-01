@@ -10,26 +10,23 @@ import { AppHeaderModule } from '../app-header/app-header.module';
 import { MaterialModule } from 'src/app/material';
 
 @NgModule({
-  entryComponents: [
-    ItemChangesDialogComponent
-  ],
-  declarations: [
-    SnapshotComponent
-  ],
-  exports: [
-    SnapshotComponent
-  ],
-  imports: [
-    CommonModule,
-    ColorBarModule,
-    MaterialModule,
-    LegendModule,
-    ItemGroupModule,
-    DateTimePickerModule,
-    AppHeaderModule,
-    MaterialModule,
-    ItemChangesDialogModule,
-    RouterModule
-  ]
+    declarations: [
+        SnapshotComponent
+    ],
+    exports: [
+        SnapshotComponent
+    ],
+    imports: [
+        CommonModule,
+        ColorBarModule,
+        MaterialModule,
+        LegendModule,
+        ItemGroupModule,
+        DateTimePickerModule,
+        AppHeaderModule,
+        MaterialModule,
+        ItemChangesDialogModule,
+        RouterModule
+    ]
 })
 export class SnapshotModule {}

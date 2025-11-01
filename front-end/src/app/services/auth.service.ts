@@ -66,6 +66,6 @@ export class AuthService {
   }
 
   private getAuthBaseUrl(): string {
-    return baseUrl.substring(0, baseUrl.lastIndexOf('/')) + '/auth/v1';
+    return baseUrl + '/api/auth/v1';
   }
 }

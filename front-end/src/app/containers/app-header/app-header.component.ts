@@ -116,6 +116,10 @@ export class AppHeaderComponent implements OnChanges, OnDestroy {
     this.sliderChange.emit(value);
   }
 
+  public formatLabel(value: number): string {
+    return `${value}`;
+  }
+
   private updateTestbedName(): void {
     // If a title was passed, take that as the priority.
     if (this.title) {

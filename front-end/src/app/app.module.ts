@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { StoreModule } from '@ngrx/store';
@@ -32,58 +32,45 @@ import { ContainersModule } from './containers';
 import { ConfirmationDialogModule, ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { MaterialModule } from './material';
 
-@NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    AppRoutingModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    ConfirmationDialogModule,
-    StatusDialogModule,
-    MaterialModule,
-    MessageDialogModule,
-    ItemFormDialogModule,
-    ItemDataDialogModule,
-    EffectsModule.forRoot([
-      ItemEffects,
-      OutputEffects,
-      NavEffects,
-      SnapshotEffects,
-      StructureEffects,
-      TestbedEffects,
-      ToastEffects,
-      UserEffects
-    ]),
-    HttpClientModule,
-    StoreModule.forRoot(ROOT_REDUCERS, {
-      metaReducers
-    }),
-    StoreRouterConnectingModule.forRoot({
-      routerState: RouterState.Minimal,
-      serializer: RouterSerializer
-    }),
-    ToastrModule.forRoot({
-      countDuplicates: true,
-      maxOpened: 4,
-      preventDuplicates: true,
-      resetTimeoutOnDuplicate: true
-    }),
-    ContainersModule
-  ],
-  entryComponents: [
-    ConfirmationDialogComponent,
-    ItemFormDialogComponent,
-    ItemDataDialogComponent,
-    MessageDialogComponent,
-    StatusDialogComponent
-  ],
-  providers: [
-    AdminGuard
-  ],
-  bootstrap: [
-    AppComponent
-  ]
-})
+@NgModule({ declarations: [
+        AppComponent
+    ],
+    bootstrap: [
+        AppComponent
+    ], imports: [AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        ConfirmationDialogModule,
+        StatusDialogModule,
+        MaterialModule,
+        MessageDialogModule,
+        ItemFormDialogModule,
+        ItemDataDialogModule,
+        EffectsModule.forRoot([
+            ItemEffects,
+            OutputEffects,
+            NavEffects,
+            SnapshotEffects,
+            StructureEffects,
+            TestbedEffects,
+            ToastEffects,
+            UserEffects
+        ]),
+        StoreModule.forRoot(ROOT_REDUCERS, {
+            metaReducers
+        }),
+        StoreRouterConnectingModule.forRoot({
+            routerState: RouterState.Minimal,
+            serializer: RouterSerializer
+        }),
+        ToastrModule.forRoot({
+            countDuplicates: true,
+            maxOpened: 4,
+            preventDuplicates: true,
+            resetTimeoutOnDuplicate: true
+        }),
+        ContainersModule], providers: [
+        AdminGuard,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule {}
