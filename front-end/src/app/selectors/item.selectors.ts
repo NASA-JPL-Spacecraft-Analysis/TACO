@@ -39,7 +39,7 @@ export const getItemDataMapWithChildren = createSelector(
         if (itemDataMap[key].parentId !== null) {
           const parent = itemDataMap[itemDataMap[key].parentId];
 
-          if (parent.children === null) {
+          if (parent.children === null || parent.children === undefined ) {
             parent.children = [];
           }
 
@@ -58,6 +58,10 @@ export const getItemsAsTree = createSelector(
     const itemDataList = [];
 
     if (itemDataMap) {
+
+
+      console.log('itemDataMap', itemDataMap);
+
       itemDataMap = cloneDeep(itemDataMap);
       const keys = Object.keys(itemDataMap);
 
@@ -65,9 +69,12 @@ export const getItemsAsTree = createSelector(
         if (itemDataMap[key].parentId !== null) {
           const parent = itemDataMap[itemDataMap[key].parentId];
 
-          if (parent.children === null) {
+          console.log('parent', parent);
+          if (parent.children === null || parent.children === undefined ) {
             parent.children = [];
           }
+
+          console.log('parent.children', parent.children);
 
           parent.children.push(itemDataMap[key]);
         }
@@ -75,12 +82,15 @@ export const getItemsAsTree = createSelector(
 
       for (const key of keys) {
         if (itemDataMap[key].parentId === null) {
+
           itemDataList.push(itemDataMap[key]);
         }
       }
     }
 
-    return sortItemDataTree(itemDataList);
+    console.log('itemDataList', itemDataList);
+
+    return sortItemDataTree({ itemDataList });
   }
 );
 
@@ -199,10 +209,10 @@ export const getSelectedTestbedItemsAsList = createSelector(
 );
 
 // Recursivly sort our item data tree. If an item is null move it to the end, otherwise sort in asc sort order.
-function sortItemDataTree(itemDataList: ItemData[]): ItemData[] {
+function sortItemDataTree({ itemDataList }: { itemDataList: ItemData[]; }): ItemData[] {
   for (const itemData of itemDataList)  {
     if (itemData.children !== null) {
-      sortItemDataTree(itemData.children);
+      sortItemDataTree({ itemDataList: itemData.children });
     }
   }
 
@@ -233,11 +243,11 @@ function populateItemStatusMap(itemDataMap: ItemDataMap): Map<number, string[]> 
 /**
  * Navigates up the component tree, populating a map that keeps a container ID mapped
  * to it's child statuses.
- * 
+ *
  * @param item The current item we're looking at.
  * @param itemDataMap The map of our objects.
  * @param statuses The current statuses we've seen while traversing up the tree.
- * @returns 
+ * @returns
  */
 function navigateTree(item: ItemData, itemDataMap: ItemDataMap, itemStatusMap: Map<number, string[]>, statuses: string[]): Map<number, string[]> {
   let currentStatuses = [];

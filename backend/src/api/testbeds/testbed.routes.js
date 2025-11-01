@@ -10,10 +10,28 @@ import express from 'express';
 
 import * as testbedService from './testbed.service.js';
 import * as testbedRepo from './testbed.repository.js';
+import * as itemService from '../items/item.service.js';
 import { asyncHandler } from '../middleware/error.js';
 import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
+
+router.get(
+    '/testbeds/:testbedId/item-data',
+    asyncHandler(async (req, res) => {
+        const testbedId = parseInt(req.params.testbedId, 10);
+        const itemDataMap = await itemService.getItemDataMap(testbedId);
+
+        if (!itemDataMap || (typeof itemDataMap === 'object' && Object.keys(itemDataMap).length === 0)) {
+            return res.status(204).send();
+        }
+
+        const payload = itemDataMap instanceof Map
+            ? Object.fromEntries(Array.from(itemDataMap.entries()))
+            : itemDataMap;
+        res.status(200).json(payload);
+    })
+);
 
 /**
  * GET /api/testbeds

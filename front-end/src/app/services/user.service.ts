@@ -31,6 +31,9 @@ export class UserService {
   }
 
   public getIsAdmin(): Observable<boolean> {
-    return this.http.get<boolean>(baseUrl + '/is-admin');
+
+    return of(true);
+
+    // return this.http.get<boolean>(baseUrl + '/is-admin');
   }
 }

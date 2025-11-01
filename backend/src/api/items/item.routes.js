@@ -5,22 +5,31 @@ import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get(
-    '/testbeds/:testbedId/item-data',
-    asyncHandler(async (req, res) => {
-        const testbedId = parseInt(req.params.testbedId, 10);
-        const itemDataMap = await itemService.getItemDataMap(testbedId);
+const getItemDataHandler = asyncHandler(async (req, res) => {
+    const testbedId = parseInt(req.params.testbedId, 10);
+    const itemDataMap = await itemService.getItemDataMap(testbedId);
 
-        if (!itemDataMap || (typeof itemDataMap === 'object' && Object.keys(itemDataMap).length === 0)) {
-            return res.status(204).send();
+    console.log('itemDataMap', itemDataMap);
+
+    // If map is empty, fallback to raw item metadata list for this testbed
+    const isEmptyMap = !itemDataMap || (itemDataMap instanceof Map && itemDataMap.size === 0) || (typeof itemDataMap === 'object' && Object.keys(itemDataMap).length === 0);
+    if (isEmptyMap) {
+        const metaList = await itemService.getItemMetadata(testbedId);
+        if (metaList && metaList.length > 0) {
+            return res.status(200).json(metaList);
         }
+        return res.status(204).send();
+    }
 
-        const payload = itemDataMap instanceof Map
-            ? Object.fromEntries(Array.from(itemDataMap.entries()))
-            : itemDataMap;
-        res.status(200).json(payload);
-    })
-);
+    const payload = itemDataMap instanceof Map
+        ? Object.fromEntries(Array.from(itemDataMap.entries()))
+        : itemDataMap;
+    res.status(200).json(payload);
+});
+
+// Support both plural and singular base paths
+router.get('/testbeds/:testbedId/item-data', getItemDataHandler);
+router.get('/testbed/:testbedId/item-data', getItemDataHandler);
 
 router.put(
     '/item-data/:itemId/description',
