@@ -7,6 +7,7 @@
  */
 
 import * as testbedRepo from './testbed.repository.js';
+import * as itemService from '../items/item.service.js';
 import { tinyintToBoolean, booleanToTinyint } from './testbedSettings.model.js';
 import { DEFAULT_ABSENT_STATUS } from './itemStatus.model.js';
 import { logger } from '../../utils/logger.js';
@@ -134,9 +135,8 @@ const createTestbed = async (request) => {
             await testbedRepo.createStatuses(testbed.id, request.statuses);
         }
 
-        // 4. TODO: Create items via ItemService when Item module is migrated
-        // Java: itemService.postItems(testbed.getId(), jsonStructure.getTestbedStructure().getItems())
-
+        // 4. Create items via ItemService when Item module is migrated
+        await itemService.postItems(testbed.id, request.items)
         // Return created testbed with statuses
         return await getTestbedById(testbed.id);
     } catch (error) {
