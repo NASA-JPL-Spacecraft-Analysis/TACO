@@ -4,6 +4,7 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import javax.sql.DataSource;
 import java.beans.PropertyVetoException;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -23,9 +24,25 @@ public class DatabaseUtil {
             dataSource = new ComboPooledDataSource();
             dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
 
-            dataSource.setJdbcUrl(System.getenv("JDBC_URL"));
-            dataSource.setUser(System.getenv("JDBC_USER"));
-            dataSource.setPassword(System.getenv("JDBC_PASS"));
+            String databaseUrl = System.getenv("DATABASE_URL");
+            if (databaseUrl != null && !databaseUrl.isEmpty()) {
+                URI uri = URI.create(databaseUrl);
+                String userInfo = uri.getUserInfo();
+                String user = userInfo != null ? userInfo : "";
+                String host = uri.getHost();
+                int port = uri.getPort();
+                String path = uri.getPath();
+                String db = (path != null && path.startsWith("/")) ? path.substring(1) : path;
+
+                String jdbcUrl = "jdbc:mysql://" + host + (port > -1 ? (":" + port) : "") + "/" + db;
+                dataSource.setJdbcUrl(jdbcUrl);
+                dataSource.setUser(user);
+                dataSource.setPassword("");
+            } else {
+                dataSource.setJdbcUrl(System.getenv("JDBC_URL"));
+                dataSource.setUser(System.getenv("JDBC_USER"));
+                dataSource.setPassword(System.getenv("JDBC_PASS"));
+            }
 
             dataSource.setMinPoolSize(3);
             dataSource.setMaxPoolSize(20);
