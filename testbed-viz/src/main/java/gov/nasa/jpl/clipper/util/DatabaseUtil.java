@@ -78,12 +78,6 @@ public class DatabaseUtil {
 
         calendar.setTime(date);
 
-        if (calendar.get(Calendar.HOUR_OF_DAY) == 0) {
-            StringBuilder sb = new StringBuilder(formattedDate);
-            sb.replace(sb.lastIndexOf("24"), sb.lastIndexOf("24") + 1, "00");
-            formattedDate = sb.toString();
-        }
-
         return formattedDate;
     }
 
