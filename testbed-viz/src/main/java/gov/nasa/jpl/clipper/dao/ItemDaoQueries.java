@@ -59,7 +59,7 @@ public class ItemDaoQueries {
                                  + " order by updated desc ";
 
     public static String LATEST_ITEM_CHANGES = " select i.* from item_changes i "
-                                             + " join (select max(updated) maxUpdated, id, item_id from item_changes group by item_id) m "
+                                             + " join (select item_id, max(updated) as maxUpdated from item_changes group by item_id) m "
                                              + " on i.updated = m.maxUpdated and i.item_id = m.item_id ";
 
     public static String ITEM_CHANGES_BY_DATE_TIME = " select * from item_changes "
