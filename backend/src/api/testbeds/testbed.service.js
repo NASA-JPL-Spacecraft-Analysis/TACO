@@ -198,7 +198,7 @@ const getTestbedSettingsById = async (testbedId) => {
         }
         const {
             id,
-            testbedId,
+            testbedId: settingsTestbedId,
             emailNotificationsList,
             recentlyChangedIndicatorDays,
             recentlyChangedIndicatorEnabled,
@@ -209,7 +209,7 @@ const getTestbedSettingsById = async (testbedId) => {
 
         return {
             id,
-            testbedId,
+            testbedId: settingsTestbedId,
             emailNotificationsList,
             recentlyChangedIndicatorEnabled: tinyintToBoolean(recentlyChangedIndicatorEnabled),
             recentlyChangedIndicatorDays,
@@ -256,7 +256,7 @@ const updateTestbedSettings = async (testbedId, request, username) => {
         const settings = await testbedRepo.updateTestbedSettings(testbedId, updateData);
         const {
             id,
-            testbedId,
+            testbedId: settingsTestbedId,
             emailNotificationsList,
             recentlyChangedIndicatorDays,
             recentlyChangedIndicatorEnabled,
@@ -267,7 +267,7 @@ const updateTestbedSettings = async (testbedId, request, username) => {
 
         return {
             id,
-            testbedId,
+            testbedId: settingsTestbedId,
             emailNotificationsList,
             recentlyChangedIndicatorEnabled: tinyintToBoolean(recentlyChangedIndicatorEnabled),
             recentlyChangedIndicatorDays,

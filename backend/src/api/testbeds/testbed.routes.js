@@ -16,7 +16,7 @@ import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.get(
+/* router.get(
     '/testbeds/:testbedId/item-data',
     asyncHandler(async (req, res) => {
         const testbedId = parseInt(req.params.testbedId, 10);
@@ -31,7 +31,7 @@ router.get(
             : itemDataMap;
         res.status(200).json(payload);
     })
-);
+); */
 
 /**
  * GET /api/testbeds

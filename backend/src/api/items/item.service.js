@@ -171,12 +171,24 @@ const postItems = async (testbedId, itemStructures) => {
 const mapItemData = async (testbedId) => {
     const items = await getItemMetadata(testbedId);
     const latest = await getLatestItemChanges();
+    const idMap = new Map();
     const map = new Map();
-    for (const i of items) map.set(i.id, i);
+
+    for (const i of items) {
+
+
+        if (!map.has(i.id)) map.set(i.id, i);
+
+        idMap.set(i.id, i);
+        map.set(i.id, i);
+    }
+
     for (const c of latest) {
         const it = map.get(c.itemId);
         if (it) it.latestChange = c;
     }
+
+
     return map;
 };
 

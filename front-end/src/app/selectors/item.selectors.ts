@@ -36,7 +36,7 @@ export const getItemDataMapWithChildren = createSelector(
       const keys = Object.keys(itemDataMap);
 
       for (const key of keys) {
-        if (itemDataMap[key].parentId !== null) {
+        if (itemDataMap[key].parentId !== undefined && itemDataMap[key].parentId !== null) {
           const parent = itemDataMap[itemDataMap[key].parentId];
 
           if (parent.children === null || parent.children === undefined ) {
@@ -60,21 +60,24 @@ export const getItemsAsTree = createSelector(
     if (itemDataMap) {
 
 
-      console.log('itemDataMap', itemDataMap);
+      // console.log('itemDataMap', itemDataMap);
 
       itemDataMap = cloneDeep(itemDataMap);
       const keys = Object.keys(itemDataMap);
 
       for (const key of keys) {
-        if (itemDataMap[key].parentId !== null) {
+        console.log('parentId', itemDataMap[key].parentId);
+        if (itemDataMap[key].parentId !== undefined && itemDataMap[key].parentId !== null ) {
+
+          console.log('parentId', itemDataMap[key].parentId);
           const parent = itemDataMap[itemDataMap[key].parentId];
 
           console.log('parent', parent);
-          if (parent.children === null || parent.children === undefined ) {
+          if (parent === undefined || parent == null ||parent.children === null || parent.children === undefined ) {
             parent.children = [];
           }
 
-          console.log('parent.children', parent.children);
+          // console.log('parent.children', parent.children);
 
           parent.children.push(itemDataMap[key]);
         }
@@ -88,7 +91,7 @@ export const getItemsAsTree = createSelector(
       }
     }
 
-    console.log('itemDataList', itemDataList);
+    //  console.log('itemDataList', itemDataList);
 
     return sortItemDataTree({ itemDataList });
   }
