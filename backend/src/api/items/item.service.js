@@ -6,6 +6,10 @@ const isoParse = (s) => {
     return isNaN(d.getTime()) ? null : d;
 };
 
+const deleteItemChange = async (itemChangesId) => itemRepo.deleteItemChange(itemChangesId);
+
+const updateItemChange = async (itemChange) => itemRepo.updateItemChange(itemChange);
+
 const toMysqlDateTime = (d) => {
     const pad = (n) => n.toString().padStart(2, '0');
     const yyyy = d.getUTCFullYear();
@@ -136,6 +140,8 @@ const getItemData = async (testbedId, history) => {
 
 const getItemChanges = async (testbedId) => itemRepo.getHistory(testbedId);
 
+const getItemChangesHistory = async () => itemRepo.getItemChangesHistory();
+
 const postItemChange = async (itemId, itemChanges) => {
     const item = await itemRepo.getItemDataById(itemId);
     if (!item || item.locked) return null;
@@ -247,7 +253,10 @@ export {
     getItemDataById,
     getItemData,
     getItemChanges,
+    getItemChangesHistory,
     postItemChange,
+    deleteItemChange,
+    updateItemChange,
     getAllItemStatuses,
     getItemStatus,
     postItems,

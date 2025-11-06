@@ -13,7 +13,7 @@ export class UserService {
   constructor(private http: HttpClient) {}
 
   public getCanEdit(testbedId: number): Observable<boolean> {
-    return this.http.get<boolean>(baseUrl + '/can-edit/' + testbedId);
+    return this.http.get<boolean>(baseUrl + '/api/users/me/permissions/' + testbedId);
   }
 
   public getUser(): Observable<User> {

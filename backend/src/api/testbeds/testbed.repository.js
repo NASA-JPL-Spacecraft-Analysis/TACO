@@ -32,6 +32,34 @@ const getTestbeds = async () => {
 };
 
 /**
+ * Update testbed sort order
+ */
+const updateTestbedSortOrder = async (testbedId, sortOrder) => {
+    try {
+        const prisma = client();
+        await prisma.testbed.update({ where: { id: testbedId }, data: { sortOrder } });
+        return sortOrder;
+    } catch (error) {
+        logger.error(`Error updating testbed ${testbedId} sortOrder`, error);
+        throw error;
+    }
+};
+
+/**
+ * Clear testbed sort order (set to null)
+ */
+const clearTestbedSortOrder = async (testbedId) => {
+    try {
+        const prisma = client();
+        await prisma.testbed.update({ where: { id: testbedId }, data: { sortOrder: null } });
+        return true;
+    } catch (error) {
+        logger.error(`Error clearing sortOrder for testbed ${testbedId}`, error);
+        throw error;
+    }
+};
+
+/**
  * Get testbed by ID
  * Mirrors: TestbedDaoImpl.getTestbedById()
  * Query: "select * from testbeds where id = ?"
@@ -265,5 +293,7 @@ export {
     getTestbedSettingsById,
     updateItemStatus,
     updateTestbedDescription,
-    updateTestbedSettings
+    updateTestbedSettings,
+    updateTestbedSortOrder,
+    clearTestbedSortOrder
 };

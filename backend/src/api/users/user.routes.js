@@ -6,8 +6,8 @@
  */
 
 import express from 'express';
-import * as userService from './user.service.js';
 import { authenticate } from '../middleware/auth.js';
+import * as testbedService from '../testbeds/testbed.service.js';
 
 const router = express.Router();
 
@@ -21,8 +21,8 @@ const router = express.Router();
  */
 router.get('/me', authenticate, (req, res, next) => {
     try {
-        // TODO: Return user from req.user (set by authenticate middleware)
-        res.status(501).json({ error: 'Not implemented' });
+        if (!req.user) return res.status(401).json({ error: 'Authentication required' });
+        res.status(200).json(req.user);
     } catch (error) {
         next(error);
     }
@@ -38,8 +38,10 @@ router.get('/me', authenticate, (req, res, next) => {
  */
 router.get('/me/admin', authenticate, (req, res, next) => {
     try {
-        // TODO: Call userService.isAdmin(req.user)
-        res.status(501).json({ error: 'Not implemented' });
+        if (!req.user) return res.status(401).json({ error: 'Authentication required' });
+        const adminGroup = process.env.ADMIN_GROUP || 'testbed-admins';
+        const isAdmin = Array.isArray(req.user.groupList) && req.user.groupList.includes(adminGroup);
+        res.status(200).json({ isAdmin });
     } catch (error) {
         next(error);
     }
@@ -55,9 +57,15 @@ router.get('/me/admin', authenticate, (req, res, next) => {
  */
 router.get('/me/permissions/:testbedId', authenticate, async (req, res, next) => {
     try {
-        const { testbedId } = req.params;
-        // TODO: Call userService.canUserEdit(testbedId, req.user)
-        res.status(501).json({ error: 'Not implemented' });
+        if (!req.user) return res.status(401).json({ error: 'Authentication required' });
+        const testbedId = parseInt(req.params.testbedId, 10);
+        const settings = await testbedService.getTestbedSettingsById(testbedId);
+        const groupStr = settings?.testbedEditGroup || '';
+        const editGroups = groupStr ? groupStr.split(',').map((g) => g.trim()).filter(Boolean) : [];
+        const canEdit = editGroups.length === 0
+            ? true
+            : (Array.isArray(req.user.groupList) && req.user.groupList.some((g) => editGroups.includes(g)));
+        res.status(200).json({ canEdit });
     } catch (error) {
         next(error);
     }

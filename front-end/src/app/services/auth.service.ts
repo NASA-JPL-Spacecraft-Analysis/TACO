@@ -62,7 +62,7 @@ export class AuthService {
   }
 
   public updateTestbedSettings(testbedSettings: TestbedSettings): Observable<TestbedSettings> {
-    return this.http.put<TestbedSettings>(this.getAuthBaseUrl() + '/testbed-settings/', testbedSettings);
+    return this.http.put<TestbedSettings>(this.getAuthBaseUrl() + '/settings/', testbedSettings);
   }
 
   private getAuthBaseUrl(): string {

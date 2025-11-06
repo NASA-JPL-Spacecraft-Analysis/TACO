@@ -65,6 +65,11 @@ const getItemChangesByDateTime = async (testbedId, dateTime) => {
     return prisma.itemChanges.findMany({ where: { updated: { lt: new Date(dateTime) }, itemId: { in: itemIds } }, orderBy: { updated: 'desc' } });
 };
 
+const getItemChangesHistory = async () => {
+    const prisma = client();
+    return prisma.itemChanges.findMany({ orderBy: { id: 'asc' } });
+};
+
 const searchItemChangesForTestbeds = async (search, testbedIds) => {
     const prisma = client();
     const items = await prisma.itemMetadata.findMany({ where: { testbedId: { in: testbedIds }, deleted: 0 }, select: { id: true, name: true, fullname: true } });
@@ -136,6 +141,28 @@ const postItems = async (testbedId, itemStructures) => {
     }
 };
 
+const deleteItemChange = async (itemChangesId) => {
+    const prisma = client();
+    await prisma.itemChanges.delete({ where: { id: itemChangesId } });
+    return true;
+};
+
+const updateItemChange = async (itemChange) => {
+    const prisma = client();
+    const data = {};
+    if (itemChange.status !== undefined) data.status = itemChange.status;
+    if (itemChange.description !== undefined) data.description = itemChange.description;
+    if (itemChange.version !== undefined) data.version = itemChange.version;
+    if (itemChange.serialNumber !== undefined) data.serialNumber = itemChange.serialNumber;
+    if (itemChange.partNumber !== undefined) data.partNumber = itemChange.partNumber;
+    if (itemChange.username !== undefined) data.username = itemChange.username;
+    if (itemChange.rationale !== undefined) data.rationale = itemChange.rationale;
+    if (itemChange.online !== undefined) data.online = itemChange.online ? 1 : 0;
+    if (itemChange.image !== undefined) data.image = itemChange.image ? 1 : 0;
+    await prisma.itemChanges.update({ where: { id: itemChange.id }, data });
+    return prisma.itemChanges.findUnique({ where: { id: itemChange.id } });
+};
+
 const searchItemChanges = async (searchMap) => {
     const prisma = client();
     const where = { OR: [] };
@@ -159,8 +186,13 @@ const updateItemDescription = async (itemId, description) => {
 };
 
 const getItemMetadataHistory = async () => {
-    const prisma = client();
-    return prisma.itemMetadataHistory.findMany({ orderBy: { id: 'asc' } });
+    try {
+        const prisma = client();
+        // Some deployments may not have this history table modeled; return empty on failure
+        return await prisma.itemMetadataHistory.findMany({ orderBy: { id: 'asc' } });
+    } catch (e) {
+        return [];
+    }
 };
 
 const createItemData = async (itemData, username) => {
@@ -198,6 +230,7 @@ const updateItemData = async (itemData, username) => {
 export {
     createItemData,
     getHistory,
+    getItemChangesHistory,
     getItemChangesByDateTime,
     getItemChangesById,
     getItemMetadata,
@@ -208,6 +241,8 @@ export {
     postItemChange,
     postItemChanges,
     postItems,
+    deleteItemChange,
+    updateItemChange,
     searchItemChanges,
     searchItemChangesForTestbeds,
     toggleOnline,

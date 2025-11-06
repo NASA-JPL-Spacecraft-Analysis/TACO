@@ -115,7 +115,7 @@ router.get(
  * GET /api/settings
  * Get all testbed settings
  * Mirrors: TestbedVizResource (GET /testbed-settings)
- * Java: @GET @Path("/testbed-settings")
+ * Java: @GET @Path("/")
  */
 router.get(
     '/settings',
@@ -186,6 +186,44 @@ router.put(
     })
 );
 
+// AUTH/V1 aliases for front-end compatibility
+// PUT /api/auth/v1/settings (expects body with testbedId)
+router.put(
+    '/auth/v1/settings',
+    authenticate,
+    asyncHandler(async (req, res) => {
+        const testbedId = parseInt(req.body?.testbedId, 10);
+        if (!testbedId) return res.status(400).json({ error: 'testbedId is required in body' });
+        const username = req.user.userId;
+        const settings = await testbedService.updateTestbedSettings(testbedId, req.body, username);
+        res.status(200).json(settings);
+    })
+);
+
+// PUT /api/auth/v1/testbed/:testbedId/sort-order
+router.put(
+    '/auth/v1/testbed/:testbedId/sort-order',
+    authenticate,
+    asyncHandler(async (req, res) => {
+        const testbedId = parseInt(req.params.testbedId, 10);
+        const sortOrder = Number(req.body);
+        if (Number.isNaN(sortOrder)) return res.status(400).json({ error: 'sortOrder numeric body required' });
+        const updated = await testbedRepo.updateTestbedSortOrder(testbedId, sortOrder);
+        res.status(200).json(updated);
+    })
+);
+
+// POST /api/auth/v1/testbed/:testbedId/clear-sort-order
+router.post(
+    '/auth/v1/testbed/:testbedId/clear-sort-order',
+    authenticate,
+    asyncHandler(async (req, res) => {
+        const testbedId = parseInt(req.params.testbedId, 10);
+        const ok = await testbedRepo.clearTestbedSortOrder(testbedId);
+        res.status(200).json(ok);
+    })
+);
+
 /**
  * POST /api/testbeds/:testbedId/statuses
  * Create item status for testbed (admin only)
@@ -213,6 +251,18 @@ router.post(
     })
 );
 
+// POST /api/auth/v1/item-status (expects body with testbedId)
+router.post(
+    '/auth/v1/item-status',
+    authenticate,
+    asyncHandler(async (req, res) => {
+        const { testbedId, status, color, sortOrder } = req.body || {};
+        if (!testbedId || !status || !color) return res.status(400).json({ error: 'testbedId, status, color are required' });
+        const createdStatus = await testbedRepo.createItemStatus(parseInt(testbedId, 10), { status, color, sortOrder });
+        res.status(201).json(createdStatus);
+    })
+);
+
 /**
  * PUT /api/testbeds/:testbedId/statuses/:statusId
  * Update item status (admin only)
@@ -233,6 +283,22 @@ router.put(
 
         const updatedStatus = await testbedRepo.updateItemStatus(statusId, updateData);
 
+        res.status(200).json(updatedStatus);
+    })
+);
+
+// PUT /api/auth/v1/item-status (expects body with id)
+router.put(
+    '/auth/v1/item-status',
+    authenticate,
+    asyncHandler(async (req, res) => {
+        const { id, status, color, sortOrder } = req.body || {};
+        if (!id) return res.status(400).json({ error: 'id is required' });
+        const updateData = {};
+        if (status !== undefined) updateData.status = status;
+        if (color !== undefined) updateData.color = color;
+        if (sortOrder !== undefined) updateData.sortOrder = sortOrder;
+        const updatedStatus = await testbedRepo.updateItemStatus(parseInt(id, 10), updateData);
         res.status(200).json(updatedStatus);
     })
 );

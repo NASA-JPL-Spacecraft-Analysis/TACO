@@ -45,7 +45,7 @@ export class ItemService {
   }
 
   public getTestbedSettings(): Observable<TestbedSettings[]> {
-    return this.http.get<TestbedSettings[]>(baseUrl + '/api/testbed-settings/');
+    return this.http.get<TestbedSettings[]>(baseUrl + '/api/settings/');
   }
 
   public createItemChanges(itemId: number, data: ItemChanges): Observable<ItemChanges> {

@@ -26,7 +26,7 @@ import * as userService from '../users/user.service.js';
  * TODO: Replace with userService.getUser(req) when implemented
  */
 const authenticate = (req, res, next) => {
-    const authMode = process.env.AUTH || 'NO_AUTH';
+    const authMode = process.env.AUTH_MODE || process.env.AUTH || 'NO_AUTH';
 
     if (authMode === 'NO_AUTH') {
         // Development mode - set mock user
